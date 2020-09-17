@@ -1,3 +1,3 @@
-cd ../elm/
+cd ./elm/
 elm-test
 

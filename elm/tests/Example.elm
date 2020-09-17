@@ -6,5 +6,5 @@ import Test exposing (..)
 
 
 suite : Test
-suite =
-    todo "Test basic Raitional creation"
+suite = test "hello world" (\_ -> Expect.equal 4 (2 + 2))
+    -- todo "Test basic Raitional creation"

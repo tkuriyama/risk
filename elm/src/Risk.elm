@@ -1,1 +1,5 @@
-import Rational
+module Risk exposing (..)
+
+risk : String
+risk = ""
+
