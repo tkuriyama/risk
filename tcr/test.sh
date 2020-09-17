@@ -1,0 +1,3 @@
+cd ../elm/
+elm-test
+
