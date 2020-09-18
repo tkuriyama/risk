@@ -28,8 +28,8 @@ fromBigInt n d =
 
 {- Arithmetic Operators -}
 
-getSign : Rational -> Rational -> Sign
-getSign a b = if eqSign a b then a.sign
+addSign : Rational -> Rational -> Sign
+addSign a b = if eqSign a b then a.sign
               else case pos a of
                        True -> if gte a b then Pos else Neg
                        False -> if gte b a then Pos else Neg
@@ -37,12 +37,21 @@ getSign a b = if eqSign a b then a.sign
 add : Rational -> Rational -> Rational
 add a b = let (an, bn) = normalize a b
               nSum = BI.add an.num bn.num
-              s = getSign a b
+              s = addSign a b
           in { num = nSum, denom = an.denom, sign = s} |> reduce
 
 sub : Rational -> Rational -> Rational
 sub a b = add a (negate b)
-              
+
+mulSign : Rational -> Rational -> Sign
+mulSign a b = if eqSign a b then Pos else Neg
+    
+mul : Rational -> Rational -> Rational
+mul a b = let s = mulSign a b
+              n = BI.mul a.num b.num
+              d = BI.mul a.denom b.denom
+          in { num = n, denom = d, sign = s } |> reduce          
+          
 
 {- Comparison Operators -}
 
