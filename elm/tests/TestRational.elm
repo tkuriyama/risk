@@ -72,8 +72,10 @@ testAdd =
 testSignMatch : Test
 testSignMatch =
     describe "Test signMatch"
-        [  test "neg and pos -> false" <|
+        [ test "neg and pos -> false" <|
               \_ -> signMatch (fromInt (-1) 2) (fromInt 1 2)
                     |> Expect.equal False
-
+        , test "neg and neg -> true" <|
+              \_ -> signMatch (fromInt (-1) 2) (fromInt 1 (-2))
+                    |> Expect.equal True  
         ]
