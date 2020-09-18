@@ -1,5 +1,5 @@
 module TestRational exposing (testBigInt, testFrom, testGCD, testLCM, testAdd,
-                              testSignMatch)
+                              testEqSign)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -28,10 +28,10 @@ testFrom =
               \_ -> fromInt 1000 2000
                     |> Expect.equal (fromBigInt (BI.fromInt 1000) (BI.fromInt 2000))
         , test "zero sign" <|
-              \_ -> signMatch (fromInt 0 0) (fromInt 1 1)
+              \_ -> eqSign (fromInt 0 0) (fromInt 1 1)
                     |> Expect.equal True
         , test "zero sign bigInt" <|
-              \_ -> signMatch (fromBigInt zero zero) (fromBigInt one one )
+              \_ -> eqSign (fromBigInt zero zero) (fromBigInt one one )
                     |> Expect.equal True                    
         ]              
       
@@ -76,13 +76,13 @@ testAdd =
                       |> Expect.equal (fromInt 752 645)                          
         ]
 
-testSignMatch : Test
-testSignMatch =
-    describe "Test signMatch"
+testEqSign : Test
+testEqSign =
+    describe "Test eqSign"
         [ test "neg and pos -> false" <|
-              \_ -> signMatch (fromInt (-1) 2) (fromInt 1 2)
+              \_ -> eqSign (fromInt (-1) 2) (fromInt 1 2)
                     |> Expect.equal False
         , test "neg and neg -> true" <|
-              \_ -> signMatch (fromInt (-1) 2) (fromInt 1 (-2))
+              \_ -> eqSign (fromInt (-1) 2) (fromInt 1 (-2))
                     |> Expect.equal True  
         ]

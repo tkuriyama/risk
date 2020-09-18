@@ -12,9 +12,7 @@ type alias Rational = { num : Numerator
     
 zero = BI.fromInt 0
 
--- -------------
--- Convertions
-----------------
+{- Conversions -}
 
 fromInt : Int -> Int -> Rational
 fromInt n d =
@@ -28,23 +26,24 @@ fromBigInt n d =
             then Pos else Neg
     in { num = n, denom = d, sign = s }
 
--------------
--- Arithmetic 
-----------------
+{- Arithmetic Operators -}
+
+getSign : Rational -> Rational -> Sign
+getSign a b = if eqSign a b then a.sign
+              else case pos a of
+                       True -> if gte a b then Pos else Neg
+                       False -> if gte b a then Pos else Neg
 
 add : Rational -> Rational -> Rational
 add a b = let d = lcm a.denom b.denom
               n1 = BI.mul a.num (BI.div d (a.denom))
               n2 = BI.mul b.num (BI.div d (b.denom))
               nSum = BI.add n1 n2
-              s = if signMatch a b then a.sign
-                  else if gte a b then Pos else Neg
+              s = getSign a b
           in { num = BI.add n1 n2, denom = d, sign = s} |> reduce
 
 
--- -------------
--- Comparisons
-----------------
+{- Comparison Operators -}
 
 gt : Rational -> Rational -> Bool
 gt a b = let (an, bn) = normalize a b
@@ -60,9 +59,14 @@ lt a b = gt b a
 lte : Rational -> Rational -> Bool
 lte a b = gte b a
 
--- -------------
--- Utilities
-----------------
+{- Rational-Specific Utilities -}
+
+pos : Rational -> Bool
+pos r = r.sign == Pos      
+
+eqSign : Rational -> Rational -> Bool
+eqSign a b = (a.sign == Pos && b.sign == Pos) ||
+                (a.sign == Neg && b.sign == Neg)
 
 normalize : Rational -> Rational -> (Rational, Rational)
 normalize a b = let d = lcm a.denom b.denom
@@ -70,10 +74,6 @@ normalize a b = let d = lcm a.denom b.denom
                     n2 = BI.mul b.num (BI.div d (b.denom))
                 in ( { num = n1, denom = d, sign = a.sign }
                    , { num = n2, denom = d, sign = b.sign })
-    
-signMatch : Rational -> Rational -> Bool
-signMatch a b = (a.sign == Pos && b.sign == Pos) ||
-                (a.sign == Neg && b.sign == Neg)
 
 reduce : Rational -> Rational
 reduce r = let d = gcd r.num r.denom
@@ -81,6 +81,8 @@ reduce r = let d = gcd r.num r.denom
               , denom = BI.div r.denom d
               , sign = r.sign }
 
+{- Arithmetic Utilities -}
+               
 lcm : BI.BigInt -> BI.BigInt -> BI.BigInt 
 lcm a b = BI.div (BI.mul a b) (gcd a b)
       
