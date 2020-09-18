@@ -23,7 +23,10 @@ testFrom =
     describe "Test fromInt and fromBigInt"
         [ test "equivalence" <|
               \_ -> fromInt 1000 2000
-                    |> Expect.equal (fromBigInt (BI.fromInt 1000) (BI.fromInt 2000))]
+                    |> Expect.equal (fromBigInt (BI.fromInt 1000) (BI.fromInt 2000))
+        , test "zero sign" <|
+              \_ -> signMatch (fromInt 0 0) (fromInt 1 1) |> Expect.equal True
+        ]              
 
 zero = BI.fromInt 0
 one = BI.fromInt 1
