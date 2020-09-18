@@ -35,12 +35,35 @@ fromBigInt n d =
 add : Rational -> Rational -> Rational
 add a b = let d = lcm a.denom b.denom
               n1 = BI.mul a.num (BI.div d (a.denom))
-              n2 = BI.mul b.num (BI.div d (b.denom))                   
-          in { num = BI.add n1 n2, denom = d, sign = Pos} |> reduce
+              n2 = BI.mul b.num (BI.div d (b.denom))
+              nSum = BI.add n1 n2
+              s = if signMatch a b then a.sign
+                  else if gte a b then Pos else Neg
+          in { num = BI.add n1 n2, denom = d, sign = s} |> reduce
 
+
+-- -------------
+-- Comparisons
+----------------
+
+gte : Rational -> Rational -> Bool
+gte a b = let (an, bn) = normalize a b
+          in BI.gte an.num bn.num
+              
 -- -------------
 -- Utilities
 ----------------
+
+normalize : Rational -> Rational -> (Rational, Rational)
+normalize a b = let d = lcm a.denom b.denom
+                    n1 = BI.mul a.num (BI.div d (a.denom))
+                    n2 = BI.mul b.num (BI.div d (b.denom))
+                in ( { num = n1, denom = d, sign = a.sign }
+                   , { num = n2, denom = d, sign = b.sign })
+    
+signMatch : Rational -> Rational -> Bool
+signMatch a b = (a.sign == Pos && b.sign == Pos) ||
+                (a.sign == Neg && b.sign == Neg)
 
 reduce : Rational -> Rational
 reduce r = let d = gcd r.num r.denom
