@@ -82,10 +82,17 @@ testAdd =
                    |> Expect.equal (fromInt 752 645)                          
         ]
 
+testSub : Test
+testSub =
+    describe "Test subtraction"
+        [ test "1/2 - 1/2 -> 0/0" <|
+              \_ -> sub (fromInt 1 2) (fromInt 1 2)
+                    |> Expect.equal (fromInt 0 0)
+        ]
 
 testComp : Test
 testComp =
-    describe "Test comparison operators"
+    describe "Test comparison operators (lt is implemented with gt)"
         [ test "lt" <|
               \_ -> lt (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
         , test "lte pass" <|
