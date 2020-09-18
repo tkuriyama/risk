@@ -23,3 +23,13 @@ testFrom =
         [ test "equivalence" <|
               \_ -> fromInt 1000 2000
                     |> Expect.equal (fromBigInt (BI.fromInt 1000) (BI.fromInt 2000))]
+
+zero = BI.fromInt 0
+one = BI.fromInt 1
+      
+testGCD : Test
+testGCD =
+    describe "Test GCD"
+        [ test "zero left" <|
+              \_ -> gcd zero one |> Expect.equal one
+              ]
