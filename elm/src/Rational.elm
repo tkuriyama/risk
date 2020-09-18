@@ -58,12 +58,14 @@ div a b = mul a { num = b.denom, denom = b.num, sign = b.sign }
 {- Comparison Operators -}
 
 gt : Rational -> Rational -> Bool
-gt a b = let (an, bn) = normalize a b
-          in BI.gt an.num bn.num     
+gt a b = case eqSign a b of
+             True -> let (an, bn) = normalize a b
+                     in if pos a then BI.gt an.num bn.num
+                         else BI.gt bn.num an.num
+             False -> pos a
 
 gte : Rational -> Rational -> Bool
-gte a b = let (an, bn) = normalize a b
-          in BI.gte an.num bn.num
+gte a b = gt a b || (reduce a) == (reduce b)
               
 lt : Rational -> Rational -> Bool
 lt a b = gt b a
