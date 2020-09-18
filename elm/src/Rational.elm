@@ -35,12 +35,10 @@ getSign a b = if eqSign a b then a.sign
                        False -> if gte b a then Pos else Neg
 
 add : Rational -> Rational -> Rational
-add a b = let d = lcm a.denom b.denom
-              n1 = BI.mul a.num (BI.div d (a.denom))
-              n2 = BI.mul b.num (BI.div d (b.denom))
-              nSum = BI.add n1 n2
+add a b = let (an, bn) = normalize a b
+              nSum = BI.add an.num bn.num
               s = getSign a b
-          in { num = BI.add n1 n2, denom = d, sign = s} |> reduce
+          in { num = nSum, denom = an.denom, sign = s} |> reduce
 
 
 {- Comparison Operators -}
