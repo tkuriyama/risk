@@ -23,10 +23,3 @@ gcd a b = if a == zero then b
           else case (BI.modBy b a) of
                    (Just m) -> gcd b m
                    Nothing -> zero
-
--- function gcd(a, b)
---    if b = 0
---        return a
---    else
---        return gcd(b, a mod b)                 
-
