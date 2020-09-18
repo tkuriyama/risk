@@ -20,7 +20,7 @@ fromBigInt n d = Rational { num = n, denom = d }
 gcd : BI.BigInt -> BI.BigInt -> BI.BigInt
 gcd a b = if a == zero then b
           else if b == zero then a
-          else case (BI.modBy a b) of
+          else case (BI.modBy b a) of
                    (Just m) -> gcd b m
                    Nothing -> zero
 

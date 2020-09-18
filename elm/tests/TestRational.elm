@@ -34,4 +34,7 @@ testGCD =
               \_ -> gcd zero one |> Expect.equal one
         , test "zero right" <|
               \_ -> gcd one zero |> Expect.equal one
+        ,  test "252 105 -> 21" <|
+              \_ -> gcd (BI.fromInt 105) (BI.fromInt 252)
+                    |> Expect.equal (BI.fromInt 21)
               ]
