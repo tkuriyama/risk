@@ -88,6 +88,12 @@ testComp =
     describe "Test comparison operators"
         [ test "lt" <|
               \_ -> lt (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
+        , test "lte pass" <|
+              \_ -> lte (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
+        , test "lte fail" <|
+              \_ -> lte (fromInt 1 2) (fromInt 1 3) |> Expect.equal False
+        , test "lte equals" <|
+              \_ -> lte (fromInt 2 5) (fromInt 2 5) |> Expect.equal True
         ]
         
 testEqSign : Test
