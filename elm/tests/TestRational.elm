@@ -63,4 +63,7 @@ testAdd =
         , test "0/1 + 1/1 -> 1/1" <|
               \_ -> add (fromInt 0 1) (fromInt 1 1)
                        |> Expect.equal (fromInt 1 1)
+        --, test "21/35 + 73/129 -> 752/645" <|
+        --      \_ -> add (fromInt 21 35) (fromInt 73 129)
+        --               |> Expect.equal (fromInt 752 645)                          
         ]
