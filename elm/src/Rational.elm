@@ -18,7 +18,8 @@ fromBigInt : BI.BigInt -> BI.BigInt -> Rational
 fromBigInt n d = Rational { num = n, denom = d }
                  
 gcd : BI.BigInt -> BI.BigInt -> BI.BigInt
-gcd a b = if b == zero then a
+gcd a b = if a == zero then b
+          else if b == zero then a
           else case (BI.modBy a b) of
                    (Just m) -> gcd b m
                    Nothing -> zero
