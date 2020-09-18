@@ -47,6 +47,8 @@ testLCM =
     describe "Test LCM"
         [ test "zero left" <|
               \_ -> lcm zero one |> Expect.equal zero
+        , test "zero right" <|
+              \_ -> lcm one zero |> Expect.equal zero
         ,  test "21 6 -> 42" <|
               \_ -> lcm (BI.fromInt 21) (BI.fromInt 6)
                     |> Expect.equal (BI.fromInt 42)
