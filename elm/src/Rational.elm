@@ -1,3 +1,8 @@
+{-
+Rational numbers, built on top of BigInt.
+Numerators and Denominators are always stored as positive BigInts, with a sign.
+-}
+
 module Rational exposing (..)
 
 import BigInt as BI
@@ -18,13 +23,17 @@ fromInt : Int -> Int -> Rational
 fromInt n d =
     let s = if (n >= 0 && d >= 0) || (n < 0 && d < 0)
             then Pos else Neg
-    in { num = BI.fromInt n, denom = BI.fromInt d, sign = s}  
+    in { num = BI.abs <| BI.fromInt n
+       , denom = BI.abs <| BI.fromInt d
+       , sign = s}  
 
 fromBigInt : BI.BigInt -> BI.BigInt -> Rational
 fromBigInt n d =
     let s = if (BI.gte n zero && BI.gte d zero) || (BI.lt n zero && BI.lt d zero)
             then Pos else Neg
-    in { num = n, denom = d, sign = s }
+    in { num = BI.abs n
+       , denom = BI.abs d
+       , sign = s }
 
 {- Arithmetic Operators -}
 
@@ -34,11 +43,18 @@ addSign a b = if eqSign a b then a.sign
                        True -> if gte a b then Pos else Neg
                        False -> if gte b a then Pos else Neg
 
+addNums : Rational -> Rational -> BI.BigInt
+addNums a b = if eqSign a b then BI.add a.num b.num
+              else case pos a of
+                       True -> BI.sub a.num b.num
+                       False -> BI.sub b.num a.num
+                                
 add : Rational -> Rational -> Rational
 add a b = let (an, bn) = normalize a b
-              nSum = BI.add an.num bn.num
-              s = addSign a b
-          in { num = nSum, denom = an.denom, sign = s} |> reduce
+          in { num = addNums an bn
+             , denom = an.denom
+             , sign = addSign a b }
+             |> reduce
 
 sub : Rational -> Rational -> Rational
 sub a b = add a (negate b)
