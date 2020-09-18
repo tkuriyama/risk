@@ -32,4 +32,6 @@ testGCD =
     describe "Test GCD"
         [ test "zero left" <|
               \_ -> gcd zero one |> Expect.equal one
+        , test "zero right" <|
+              \_ -> gcd one zero |> Expect.equal one
               ]
