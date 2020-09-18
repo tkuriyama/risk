@@ -5,6 +5,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
 import BigInt as BI
+import Rational
 
 testBigInt : Test
 testBigInt =
