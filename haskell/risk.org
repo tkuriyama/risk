@@ -1,0 +1,98 @@
+
+#+OPTIONS: reveal_title_slide:nil 
+#+OPTIONS: toc:nil
+
+* Risk
+
+** The Game
+
+#+ATTR_REVEAL: :frag (appear)
+- Domain: the dice battles, not the board game 
+- Attacker and Defender each have some number of units
+- Units battle with die rolls in successive rounds
+- Attacker goal: destroy all Defender units
+- Defender goal: reduce Attacker units to 1 
+
+** Battle Unit Rules 
+
+#+ATTR_REVEAL: :frag (appear)
+- Attacker has A units, Defender has D units
+- Attacker can use min(3, A-1)
+- Defender can use min(2, D)
+
+** Battle Dice Rules 
+
+#+ATTR_REVEAL: :frag (appear)
+- A and D rolls are sorted in descending order and zipped
+- e.g. A {4,1,3} and D {4,2} -> [(4,4), (3,2)]
+- Defender has advantage: win on condition (>=)
+- e.g. (4,4) -> Defender wins if 4 >= 4
+
+** Question 
+
+- Given starting number of units (A, D)...
+- What is the exact probability that Attacker wins? 
+
+* Computing Probabilities
+
+** Approach
+
+#+ATTR_REVEAL: :frag (appear)
+- Find out probability of each possible battle outcome
+- Chain probability of outcomes 
+- From game specs, there are limited battles 
+- [(3,2), (3,1), (2,2), (2,1), (1,2), (1,1)]
+
+
+** Outcome Example
+
+#+ATTR_REVEAL: :frag (appear)
+- (1,1): Attacker 1 die vs Defender 1 die
+- What are outcomes and associated probabilities? 
+- Both die can roll 1 to 6, so 36 battle permutations
+- Attacker loses in 21 / 36; Defender loses in 15 / 36
+
+** Haskell Implementation
+
+#+BEGIN_SRC haskell
+successExact :: Battlefield -> Probability
+successExact (Battlefield _ 0) = 1
+successExact (Battlefield 1 _) = 0
+successExact b =
+  case M.lookup (maxTroops b) pMap of
+    Nothing -> 0
+    Just ps -> agg $ map update $ filter (not . aLoses b) ps
+  where update (p, losses) = (p, updateField b losses)
+
+agg :: [(Probability,  Battlefield)] -> Probability
+agg pairs = foldr f 0 pairs
+  where f (p, b) accP = accP + (p * successExact b)
+#+END_SRC
+
+* Results 
+
+** 10 x 10 Matrix
+
+[[./images/risktable.png]]
+
+** Notes 
+
+- The Rational type in Haskell gives *exact* results
+- Never realized that Rational meant representible as ratio!
+
+#+BEGIN_SRC haskell
+A: 3 B: 3 | Exact: 20.61%  | Exact: 692225 % 3359232
+A: 3 B: 4 | Exact: 9.13%   | Exact: 5520775 % 60466176
+#+END_SRC
+
+** Also Interesting 
+
+- Wolfram Alpha
+
+[[./images/wolfram.png]]
+
+https://blog.wolfram.com/2017/11/20/how-to-win-at-risk-exact-probabilities/
+
+** Next Steps
+
+- Elm visualization of probability chain!

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<meta name="author" content="(Taro Kuriyama)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/dist/reveal.css"/>
+
+<link rel="stylesheet" href="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/dist/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+<section id="slide-org08b6d76">
+<h2 id="org08b6d76"><span class="section-number-2">1</span> Risk</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+</section>
+<section id="slide-orgc226820">
+<h3 id="orgc226820"><span class="section-number-3">1.1</span> The Game</h3>
+<ul>
+<li class="fragment appear">Domain: the dice battles, not the board game</li>
+<li class="fragment appear">Attacker and Defender each have some number of units</li>
+<li class="fragment appear">Units battle with die rolls in successive rounds</li>
+<li class="fragment appear">Attacker goal: destroy all Defender units</li>
+<li class="fragment appear">Defender goal: reduce Attacker units to 1</li>
+
+</ul>
+
+</section>
+<section id="slide-orga89f39e">
+<h3 id="orga89f39e"><span class="section-number-3">1.2</span> Battle Unit Rules</h3>
+<ul>
+<li class="fragment appear">Attacker has A units, Defender has D units</li>
+<li class="fragment appear">Attacker can use min(3, A-1)</li>
+<li class="fragment appear">Defender can use min(2, D)</li>
+
+</ul>
+
+</section>
+<section id="slide-org2d2743d">
+<h3 id="org2d2743d"><span class="section-number-3">1.3</span> Battle Dice Rules</h3>
+<ul>
+<li class="fragment appear">A and D rolls are sorted in descending order and zipped</li>
+<li class="fragment appear">e.g. A {4,1,3} and D {4,2} -&gt; [(4,4), (3,2)]</li>
+<li class="fragment appear">Defender has advantage: win on condition (&gt;=)</li>
+<li class="fragment appear">e.g. (4,4) -&gt; Defender wins if 4 &gt;= 4</li>
+
+</ul>
+
+</section>
+<section id="slide-org9e2075f">
+<h3 id="org9e2075f"><span class="section-number-3">1.4</span> Question</h3>
+<ul>
+<li>Given starting number of units (A, D)&#x2026;</li>
+<li>What is the exact probability that Attacker wins?</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org342cbe5">
+<h2 id="org342cbe5"><span class="section-number-2">2</span> Computing Probabilities</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+</section>
+<section id="slide-org0fbf2fe">
+<h3 id="org0fbf2fe"><span class="section-number-3">2.1</span> Approach</h3>
+<ul>
+<li class="fragment appear">Find out probability of each possible battle outcome</li>
+<li class="fragment appear">Chain probability of outcomes</li>
+<li class="fragment appear">From game specs, there are limited battles</li>
+<li class="fragment appear">[(3,2), (3,1), (2,2), (2,1), (1,2), (1,1)]</li>
+
+</ul>
+
+
+</section>
+<section id="slide-org997ba28">
+<h3 id="org997ba28"><span class="section-number-3">2.2</span> Outcome Example</h3>
+<ul>
+<li class="fragment appear">(1,1): Attacker 1 die vs Defender 1 die</li>
+<li class="fragment appear">What are outcomes and associated probabilities?</li>
+<li class="fragment appear">Both die can roll 1 to 6, so 36 battle permutations</li>
+<li class="fragment appear">Attacker loses in 21 / 36; Defender loses in 15 / 36</li>
+
+</ul>
+
+</section>
+<section id="slide-org1e96e72">
+<h3 id="org1e96e72"><span class="section-number-3">2.3</span> Haskell Implementation</h3>
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><code trim><span style="color: #93E0E3;">successExact</span> <span style="color: #DFAF8F;">::</span> <span style="color: #7CB8BB;">Battlefield</span> <span style="color: #DFAF8F;">-&gt;</span> <span style="color: #7CB8BB;">Probability</span>
+<span style="color: #93E0E3;">successExact</span> (<span style="color: #7CB8BB;">Battlefield</span> <span style="color: #F0DFAF; font-weight: bold;">_</span> 0) <span style="color: #DFAF8F;">=</span> 1
+<span style="color: #93E0E3;">successExact</span> (<span style="color: #7CB8BB;">Battlefield</span> 1 <span style="color: #F0DFAF; font-weight: bold;">_</span>) <span style="color: #DFAF8F;">=</span> 0
+<span style="color: #93E0E3;">successExact</span> b <span style="color: #DFAF8F;">=</span>
+  <span style="color: #F0DFAF; font-weight: bold;">case</span> M.lookup (maxTroops b) pMap <span style="color: #F0DFAF; font-weight: bold;">of</span>
+    <span style="color: #7CB8BB;">Nothing</span> <span style="color: #DFAF8F;">-&gt;</span> 0
+    <span style="color: #7CB8BB;">Just</span> ps <span style="color: #DFAF8F;">-&gt;</span> agg <span style="color: #DFAF8F;">$</span> map update <span style="color: #DFAF8F;">$</span> filter (not <span style="color: #DFAF8F;">.</span> aLoses b) ps
+  <span style="color: #F0DFAF; font-weight: bold;">where</span> update (p, losses) <span style="color: #DFAF8F;">=</span> (p, updateField b losses)
+
+<span style="color: #93E0E3;">agg</span> <span style="color: #DFAF8F;">::</span> [(<span style="color: #7CB8BB;">Probability</span>,  <span style="color: #7CB8BB;">Battlefield</span>)] <span style="color: #DFAF8F;">-&gt;</span> <span style="color: #7CB8BB;">Probability</span>
+<span style="color: #93E0E3;">agg</span> pairs <span style="color: #DFAF8F;">=</span> foldr f 0 pairs
+  <span style="color: #F0DFAF; font-weight: bold;">where</span> f (p, b) accP <span style="color: #DFAF8F;">=</span> accP <span style="color: #DFAF8F;">+</span> (p <span style="color: #DFAF8F;">*</span> successExact b)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org65d2069">
+<h2 id="org65d2069"><span class="section-number-2">3</span> Results</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+</section>
+<section id="slide-orgf48a3f5">
+<h3 id="orgf48a3f5"><span class="section-number-3">3.1</span> 10 x 10 Matrix</h3>
+
+<div class="figure">
+<p><img src="./images/risktable.png" alt="risktable.png" />
+</p>
+</div>
+
+</section>
+<section id="slide-org4c32492">
+<h3 id="org4c32492"><span class="section-number-3">3.2</span> Notes</h3>
+<ul>
+<li>The Rational type in Haskell gives <b>exact</b> results</li>
+<li>Never realized that Rational meant representible as ratio!</li>
+
+</ul>
+
+<div class="org-src-container">
+
+<pre  class="src src-haskell"><code trim><span style="color: #7CB8BB;">A</span><span style="color: #93E0E3;">:</span> 3 <span style="color: #7CB8BB;">B:</span> 3 <span style="color: #DFAF8F;">|</span> <span style="color: #7CB8BB;">Exact:</span> 20.61<span style="color: #DFAF8F;">%</span>  <span style="color: #DFAF8F;">|</span> <span style="color: #7CB8BB;">Exact:</span> 692225 <span style="color: #DFAF8F;">%</span> 3359232
+<span style="color: #7CB8BB;">A</span><span style="color: #93E0E3;">:</span> 3 <span style="color: #7CB8BB;">B:</span> 4 <span style="color: #DFAF8F;">|</span> <span style="color: #7CB8BB;">Exact:</span> 9.13<span style="color: #DFAF8F;">%</span>   <span style="color: #DFAF8F;">|</span> <span style="color: #7CB8BB;">Exact:</span> 5520775 <span style="color: #DFAF8F;">%</span> 60466176
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org720cf8a">
+<h3 id="org720cf8a"><span class="section-number-3">3.3</span> Also Interesting</h3>
+<ul>
+<li>Wolfram Alpha</li>
+
+</ul>
+
+
+<div class="figure">
+<p><img src="./images/wolfram.png" alt="wolfram.png" />
+</p>
+</div>
+
+<p>
+<a href="https://blog.wolfram.com/2017/11/20/how-to-win-at-risk-exact-probabilities/">https://blog.wolfram.com/2017/11/20/how-to-win-at-risk-exact-probabilities/</a>
+</p>
+
+</section>
+<section id="slide-org8dbb835">
+<h3 id="org8dbb835"><span class="section-number-3">3.4</span> Next Steps</h3>
+<ul>
+<li>Elm visualization of probability chain!</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/dist/reveal.js"></script>
+<script src="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/plugin/markdown/markdown.js"></script>
+<script src="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/plugin/zoom/zoom.js"></script>
+<script src="/Users/tarokuriyama/Dropbox/CS/bin/emacs/reveal/plugin/notes/notes.js"></script>
+
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+plugins: [RevealMarkdown,RevealZoom,RevealNotes],
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+]
+});
+</script>
+</body>
+</html>
