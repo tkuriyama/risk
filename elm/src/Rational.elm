@@ -11,3 +11,6 @@ type Rational = Rational { num : Numerator
 
 fromInt : Int -> Int -> Rational
 fromInt n d = Rational { num = BI.fromInt n, denom = BI.fromInt d }          
+
+fromBigInt : BI.BigInt -> BI.BigInt -> Rational
+fromBigInt n d = Rational { num = n, denom = d }
