@@ -48,13 +48,25 @@ addNums a b = if eqSign a b then BI.add a.num b.num
               else case pos a of
                        True -> BI.sub a.num b.num |> BI.abs
                        False -> BI.sub b.num a.num |> BI.abs
-                                
+
+addEqSign : Rational -> Rational -> Rational
+addEqSign a b = { num = BI.add a.num b.num
+                , denom = a.denom
+                , sign = a.sign } |> reduce            
+
+addNotEqSign : Rational -> Rational -> Rational
+addNotEqSign a b = 
+    let (x, y) = if pos a then (a, b) else (b, a)
+        s = if gte x y then Pos else Neg
+    in { num = BI.sub x.num y.num
+       , denom = x.num
+       , sign = s } |> reduce
+                                                                    
 add : Rational -> Rational -> Rational
-add a b = let (an, bn) = normalize a b
-          in { num = addNums an bn
-             , denom = an.denom
-             , sign = addSign a b }
-             |> reduce
+add a b = let (an, bn) = normalize a b                         
+              f = if eqSign a b then addEqSign else addNotEqSign
+          in f an bn
+             -- |> reduce
 
 sub : Rational -> Rational -> Rational
 sub a b = add a (negate b)
