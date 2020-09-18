@@ -9,5 +9,5 @@ type Rational = Rational { num : Numerator
                          , denom : Denominator }
               | NotRational String
 
--- r = Rational { numerator = BI.fromIntString "123", denominator = BI.fromIntString "456" }    
-                             
+fromInt : Int -> Int -> Rational
+fromInt n d = Rational { num = BI.fromInt n, denom = BI.fromInt d }          
