@@ -16,6 +16,7 @@ testBigInt =
         , test "Addition" <|
             \_ -> BI.add (BI.fromInt 999) (BI.fromInt 1)
                   |> Expect.equal (BI.fromInt 1000) ]
+
 testFrom : Test
 testFrom =
     describe "Test fromInt and fromBigInt"
