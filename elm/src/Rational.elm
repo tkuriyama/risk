@@ -14,9 +14,13 @@ fromInt n d = Rational { num = BI.fromInt n, denom = BI.fromInt d }
 
 fromBigInt : BI.BigInt -> BI.BigInt -> Rational
 fromBigInt n d = Rational { num = n, denom = d }
-
--- gcd :: BigInt -> BigInt -> BigInt
--- gcd                  
+                 
+gcd :: BigInt -> BigInt -> BigInt
+gcd a b = if a == b then a
+          else let m = BI.modBy a b
+               in case m of
+                      (Just n) -> gcd n
+                      Nothing -> 0
                  
 -- function gcd(a, b)
 --     while a ≠ b 
