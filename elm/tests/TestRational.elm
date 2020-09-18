@@ -67,3 +67,12 @@ testAdd =
              \_ -> add (fromInt 21 35) (fromInt 73 129)
                       |> Expect.equal (fromInt 752 645)                          
         ]
+
+testSignMatch : Test
+testSignMatch =
+    describe "Test signMatch"
+        [  test "neg and pos -> false" <|
+              \_ -> signMatch (fromInt (-1) 2) (fromInt 1 2)
+                    |> Expect.equal False
+
+        ]
