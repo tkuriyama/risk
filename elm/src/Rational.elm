@@ -5,9 +5,8 @@ import BigInt as BI
 type alias Numerator = BI.BigInt
 type alias Denominator = BI.BigInt
 
-type Rational = Rational { num : Numerator
-                         , denom : Denominator }
-              | NotRational String
+type alias Rational = { num : Numerator
+                      , denom : Denominator }
 
 zero = BI.fromInt 0
 
@@ -16,11 +15,21 @@ zero = BI.fromInt 0
 ----------------
 
 fromInt : Int -> Int -> Rational
-fromInt n d = Rational { num = BI.fromInt n, denom = BI.fromInt d }          
+fromInt n d = { num = BI.fromInt n, denom = BI.fromInt d }          
 
 fromBigInt : BI.BigInt -> BI.BigInt -> Rational
-fromBigInt n d = Rational { num = n, denom = d }
+fromBigInt n d = { num = n, denom = d }
 
+-------------
+-- Arithmetic 
+----------------
+
+add : Rational -> Rational -> Rational
+add a b = let d = lcm a.denom b.denom
+              n1 = BI.mul a.num (BI.div d (a.denom))
+              n2 = BI.mul b.num (BI.div d (b.denom))                   
+          in { num = BI.add n1 n2
+             , denom = d }
 
 -- -------------
 -- Utilities
