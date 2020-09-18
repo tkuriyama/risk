@@ -46,8 +46,8 @@ addSign a b = if eqSign a b then a.sign
 addNums : Rational -> Rational -> BI.BigInt
 addNums a b = if eqSign a b then BI.add a.num b.num
               else case pos a of
-                       True -> BI.sub a.num b.num
-                       False -> BI.sub b.num a.num
+                       True -> BI.sub a.num b.num |> BI.abs
+                       False -> BI.sub b.num a.num |> BI.abs
                                 
 add : Rational -> Rational -> Rational
 add a b = let (an, bn) = normalize a b
