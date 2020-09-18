@@ -1,5 +1,5 @@
 module TestRational exposing (testBigInt, testFrom, testGCD, testLCM, testAdd,
-                              testEqSign)
+                              testComp, testEqSign)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -82,6 +82,14 @@ testAdd =
                    |> Expect.equal (fromInt 752 645)                          
         ]
 
+
+testComp : Test
+testComp =
+    describe "Test comparison operators"
+        [ test "lt" <|
+              \_ -> lt (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
+        ]
+        
 testEqSign : Test
 testEqSign =
     describe "Test eqSign"
