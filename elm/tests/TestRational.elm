@@ -42,7 +42,7 @@ testGCD =
                     |> Expect.equal (gcd (BI.fromInt 252) (BI.fromInt 105))     
     ]
 
-testLCM: Test
+testLCM : Test
 testLCM =
     describe "Test LCM"
         [ test "zero left" <|
@@ -53,3 +53,11 @@ testLCM =
               \_ -> lcm (BI.fromInt 21) (BI.fromInt 6)
                     |> Expect.equal (BI.fromInt 42)
     ]
+
+testAdd : Test
+testAdd =
+    describe "Test addition"
+        [ test "0/1 + 1/2 -> 1/2" <|
+              \_ -> add (fromInt 0 1) (fromInt 1 2)
+                    |> Expect.equal (fromInt 1 2)
+        ]
