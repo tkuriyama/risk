@@ -70,13 +70,16 @@ testAdd =
                     |> Expect.equal (fromInt 1 2)
         , test "0/1 + 1/1 -> 1/1" <|
               \_ -> add (fromInt 0 1) (fromInt 1 1)
-                       |> Expect.equal (fromInt 1 1)
-        , test "1/1 + (-1/2) -> (1/2)" <|
+                    |> Expect.equal (fromInt 1 1)
+        , test "1/1 + -1/2 -> 1/2" <|
               \_ -> add (fromInt 1 1) (fromInt (-1) 2)
-                       |> Expect.equal (fromInt 1 2)                          
+                    |> Expect.equal (fromInt 1 2)
+        , test "-1/2 + 1/1 -> 1/2" <|
+              \_ -> add (fromInt (-1) 2) (fromInt 1 1)
+                    |> Expect.equal (fromInt 1 2)  
         , test "21/35 + 73/129 -> 752/645" <|
              \_ -> add (fromInt 21 35) (fromInt 73 129)
-                      |> Expect.equal (fromInt 752 645)                          
+                   |> Expect.equal (fromInt 752 645)                          
         ]
 
 testEqSign : Test
