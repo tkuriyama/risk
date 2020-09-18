@@ -1,4 +1,4 @@
-module TestRational exposing (testBigInt, testFrom, testGCD, testLCM)
+module TestRational exposing (testBigInt, testFrom, testGCD, testLCM, testAdd)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -60,4 +60,7 @@ testAdd =
         [ test "0/1 + 1/2 -> 1/2" <|
               \_ -> add (fromInt 0 1) (fromInt 1 2)
                     |> Expect.equal (fromInt 1 2)
+        , test "0/1 + 1/1 -> 1/1" <|
+              \_ -> add (fromInt 0 1) (fromInt 1 1)
+                       |> Expect.equal (fromInt 1 1)
         ]
