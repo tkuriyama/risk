@@ -37,4 +37,7 @@ testGCD =
         ,  test "252 105 -> 21" <|
               \_ -> gcd (BI.fromInt 105) (BI.fromInt 252)
                     |> Expect.equal (BI.fromInt 21)
-        ]
+    ,  test "order invaraince" <|
+              \_ -> gcd (BI.fromInt 105) (BI.fromInt 252)
+                    |> Expect.equal (gcd (BI.fromInt 252) (BI.fromInt 105))     
+    ]
