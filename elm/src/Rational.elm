@@ -46,10 +46,20 @@ add a b = let d = lcm a.denom b.denom
 -- Comparisons
 ----------------
 
+gt : Rational -> Rational -> Bool
+gt a b = let (an, bn) = normalize a b
+          in BI.gt an.num bn.num     
+
 gte : Rational -> Rational -> Bool
 gte a b = let (an, bn) = normalize a b
           in BI.gte an.num bn.num
               
+lt : Rational -> Rational -> Bool
+lt a b = gt b a
+
+lte : Rational -> Rational -> Bool
+lte a b = gte b a
+
 -- -------------
 -- Utilities
 ----------------
