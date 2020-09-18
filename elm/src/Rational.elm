@@ -28,12 +28,15 @@ add : Rational -> Rational -> Rational
 add a b = let d = lcm a.denom b.denom
               n1 = BI.mul a.num (BI.div d (a.denom))
               n2 = BI.mul b.num (BI.div d (b.denom))                   
-          in { num = BI.add n1 n2
-             , denom = d }
+          in { num = BI.add n1 n2, denom = d } |> reduce
 
 -- -------------
 -- Utilities
 ----------------
+
+reduce : Rational -> Rational
+reduce r = let d = gcd r.num r.denom
+           in { num = BI.div r.num d, denom = BI.div r.denom d }
 
 lcm : BI.BigInt -> BI.BigInt -> BI.BigInt 
 lcm a b = BI.div (BI.mul a b) (gcd a b)
