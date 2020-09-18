@@ -52,7 +52,7 @@ addNums a b = if eqSign a b then BI.add a.num b.num
 addEqSign : Rational -> Rational -> Rational
 addEqSign a b = { num = BI.add a.num b.num
                 , denom = a.denom
-                , sign = a.sign } |> reduce            
+                , sign = a.sign }            
 
 addNotEqSign : Rational -> Rational -> Rational
 addNotEqSign a b = 
@@ -60,13 +60,12 @@ addNotEqSign a b =
         s = if BI.gte x.num y.num then Pos else Neg
     in { num = BI.sub x.num y.num
        , denom = x.denom
-       , sign = s } |> reduce
+       , sign = s }
                                                                     
 add : Rational -> Rational -> Rational
 add a b = let (an, bn) = normalize a b                         
               f = if eqSign a b then addEqSign else addNotEqSign
-          in f an bn
-             -- |> reduce
+          in f an bn |> reduce
 
 sub : Rational -> Rational -> Rational
 sub a b = add a (negate b)
@@ -115,7 +114,7 @@ abs r = if pos r then r else negate r
         
 eqSign : Rational -> Rational -> Bool
 eqSign a b = (a.sign == Pos && b.sign == Pos) ||
-                (a.sign == Neg && b.sign == Neg)
+             (a.sign == Neg && b.sign == Neg)
 
 normalize : Rational -> Rational -> (Rational, Rational)
 normalize a b = let d = lcm a.denom b.denom
