@@ -1,4 +1,4 @@
-module TestRational exposing (testBigInt, testFrom, testGCD)
+module TestRational exposing (testBigInt, testFrom, testGCD, testLCM)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -40,4 +40,16 @@ testGCD =
     ,  test "order invaraince" <|
               \_ -> gcd (BI.fromInt 105) (BI.fromInt 252)
                     |> Expect.equal (gcd (BI.fromInt 252) (BI.fromInt 105))     
+    ]
+
+testLCM: Test
+testLCM =
+    describe "Test LCM"
+        [ test "zero left" <|
+              \_ -> lcm zero one |> Expect.equal zero
+        -- , test "zero right" <|
+        --       \_ -> lcm one zero |> Expect.equal one
+        -- ,  test "21 6 -> 42" <|
+        --       \_ -> gcd (BI.fromInt 21) (BI.fromInt 6)
+        --             |> Expect.equal (BI.fromInt 42)
     ]
