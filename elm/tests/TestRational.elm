@@ -88,6 +88,9 @@ testSub =
         [ test "1/2 - 1/2 -> 0/0" <|
               \_ -> sub (fromInt 1 2) (fromInt 1 2)
                     |> Expect.equal (fromInt 0 0)
+        , test "1/2 - 1 -> -1/2" <|
+              \_ -> sub (fromInt 1 2) (fromInt 1 1)
+                    |> Expect.equal (fromInt 1 (-2))
         ]
 
 testComp : Test
