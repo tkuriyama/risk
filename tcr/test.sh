@@ -1,3 +1,3 @@
 cd ./elm/
-elm-test
-
+# elm-test
+elm-coverage
