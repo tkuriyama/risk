@@ -8,6 +8,9 @@ import Test exposing (..)
 import BigInt as BI
 import Rational exposing (..)
 
+zero = BI.fromInt 0
+one = BI.fromInt 1
+
 testBigInt : Test
 testBigInt =
     describe "Basic BigInt"
@@ -25,11 +28,12 @@ testFrom =
               \_ -> fromInt 1000 2000
                     |> Expect.equal (fromBigInt (BI.fromInt 1000) (BI.fromInt 2000))
         , test "zero sign" <|
-              \_ -> signMatch (fromInt 0 0) (fromInt 1 1) |> Expect.equal True
+              \_ -> signMatch (fromInt 0 0) (fromInt 1 1)
+                    |> Expect.equal True
+        , test "zero sign bigInt" <|
+              \_ -> signMatch (fromBigInt zero zero) (fromBigInt one one )
+                    |> Expect.equal True                    
         ]              
-
-zero = BI.fromInt 0
-one = BI.fromInt 1
       
 testGCD : Test
 testGCD =
