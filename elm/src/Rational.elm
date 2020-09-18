@@ -40,6 +40,9 @@ add a b = let (an, bn) = normalize a b
               s = getSign a b
           in { num = nSum, denom = an.denom, sign = s} |> reduce
 
+sub : Rational -> Rational -> Rational
+sub a b = add a (negate b)
+              
 
 {- Comparison Operators -}
 
@@ -62,6 +65,10 @@ lte a b = gte b a
 pos : Rational -> Bool
 pos r = r.sign == Pos      
 
+negate : Rational -> Rational
+negate r = let s = if pos r then Neg else Pos
+           in { num = r.num, denom = r.denom, sign = s }
+        
 eqSign : Rational -> Rational -> Bool
 eqSign a b = (a.sign == Pos && b.sign == Pos) ||
                 (a.sign == Neg && b.sign == Neg)
