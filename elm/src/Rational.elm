@@ -18,12 +18,14 @@ zero = BI.fromInt 0
 
 fromInt : Int -> Int -> Rational
 fromInt n d =
-    let s = if n >= 0 && d >= 0 then Pos else Neg
+    let s = if (n >= 0 && d >= 0) || (n < 0 && d < 0)
+            then Pos else Neg
     in { num = BI.fromInt n, denom = BI.fromInt d, sign = s}  
 
 fromBigInt : BI.BigInt -> BI.BigInt -> Rational
 fromBigInt n d =
-    let s = if BI.gte n zero && BI.gte d zero then Pos else Neg
+    let s = if (BI.gte n zero && BI.gte d zero) || (BI.lt n zero && BI.lt d zero)
+            then Pos else Neg
     in { num = n, denom = d, sign = s }
 
 -------------
