@@ -1,4 +1,5 @@
-module TestRational exposing (testBigInt, testFrom, testGCD, testLCM, testAdd)
+module TestRational exposing (testBigInt, testFrom, testGCD, testLCM, testAdd,
+                              testSignMatch)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
