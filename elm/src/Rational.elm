@@ -51,7 +51,9 @@ mul a b = let s = mulSign a b
               n = BI.mul a.num b.num
               d = BI.mul a.denom b.denom
           in { num = n, denom = d, sign = s } |> reduce          
-          
+
+div : Rational -> Rational -> Rational
+div a b = mul a { num = b.denom, denom = b.num, sign = b.sign }
 
 {- Comparison Operators -}
 
