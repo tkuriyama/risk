@@ -10,4 +10,8 @@ testBigInt : Test
 testBigInt =
     describe "Basic BigInt"
         [ test "Identity" <|
-              \_ -> BI.fromIntString "1234" |> Expect.equal (BI.fromIntString "1234") ]
+              \_ -> BI.fromIntString "1234"
+                    |> Expect.equal (BI.fromIntString "1234")
+        , test "Addition" <|
+            \_ -> BI.add (BI.fromInt 999) (BI.fromInt 1)
+                  |> Expect.equal (BI.fromInt 1000) ]
