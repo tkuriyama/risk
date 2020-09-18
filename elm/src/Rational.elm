@@ -14,3 +14,14 @@ fromInt n d = Rational { num = BI.fromInt n, denom = BI.fromInt d }
 
 fromBigInt : BI.BigInt -> BI.BigInt -> Rational
 fromBigInt n d = Rational { num = n, denom = d }
+
+-- gcd :: BigInt -> BigInt -> BigInt
+-- gcd                  
+                 
+-- function gcd(a, b)
+--     while a ≠ b 
+--         if a > b
+--             a := a − b
+--         else
+--             b := b − a
+--     return a      
