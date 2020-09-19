@@ -58,7 +58,7 @@ addNotEqSign : Rational -> Rational -> Rational
 addNotEqSign a b = 
     let (x, y) = if pos a then (a, b) else (b, a)
         s = if BI.gte x.num y.num then Pos else Neg
-    in { num = BI.sub x.num y.num
+    in { num = BI.sub x.num y.num |> BI.abs
        , denom = x.denom
        , sign = s }
                                                                     
