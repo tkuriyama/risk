@@ -99,8 +99,8 @@ negate : Rational -> Rational
 negate r = let s = if pos r then Neg else Pos
            in { num = r.num, denom = r.denom, sign = s }
 
-abs : Rational -> Rational               
-abs r = if pos r then r else negate r
+absolute : Rational -> Rational               
+absolute r = if pos r then r else negate r
         
 eqSign : Rational -> Rational -> Bool
 eqSign a b = (a.sign == Pos && b.sign == Pos) ||
