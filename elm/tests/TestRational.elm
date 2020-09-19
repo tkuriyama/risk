@@ -133,8 +133,8 @@ testComp =
     describe "Test comparison operators (lt is implemented with gt)"
         [ test "gt same sign pos" <|
               \_ -> gt (fromInt 1 2) (fromInt 1 3) |> Expect.equal True
-        --, test "gt same sign neg" <|
-        --      \_ -> gt (fromInt (-1) 3) (fromInt (-1) 2) |> Expect.equal True
+        , test "gt same sign neg" <|
+             \_ -> gt (fromInt (-1) 3) (fromInt (-1) 2) |> Expect.equal True
          , test "lt" <|
               \_ -> lt (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
         , test "lte pass" <|
