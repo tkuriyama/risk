@@ -112,6 +112,9 @@ testMul =
         [ test "simple mul" <|
               \_ -> mul (fromInt 45 123) (fromInt 124 29)
                     |> Expect.equal (fromInt 1860 1189)
+        , test "mul by zero" <|
+              \_ -> mul (fromInt 45 123) (fromInt 0 1)
+                    |> Expect.equal (fromInt 0 1)
         ]
           
         
