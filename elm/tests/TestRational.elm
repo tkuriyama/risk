@@ -89,9 +89,9 @@ testSub =
         [ test "1/2 - 1/2 -> 0/0" <|
               \_ -> sub (fromInt 1 2) (fromInt 1 2)
                     |> Expect.equal (fromInt 0 1)
-        -- , test "1/2 - 1 -> -1/2" <|
-        --       \_ -> sub (fromInt 1 2) (fromInt 1 1)
-        --             |> Expect.equal (fromInt 1 (-2))
+        , test "1/2 - 1 -> -1/2" <|
+              \_ -> sub (fromInt 1 2) (fromInt 1 1)
+                    |> Expect.equal (fromInt 1 (-2))
         -- , test "arbitrary subtraction" <|
         --       \_ -> sub (fromInt 123 1234) (fromInt 697 12359)
         --             |> Expect.equal (fromInt 18827 897118)
