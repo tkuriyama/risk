@@ -106,6 +106,15 @@ testSub =
                     |> Expect.equal (fromInt 38827 897118)
         ]
 
+testMul : Test
+testMul =
+    describe "Test multiply"
+        [ test "simple mul" <|
+              \_ -> mul (fromInt 45 123) (fromInt 124 29)
+                    |> Expect.equal (fromInt 1860 1189)
+        ]
+          
+        
 testComp : Test
 testComp =
     describe "Test comparison operators (lt is implemented with gt)"
