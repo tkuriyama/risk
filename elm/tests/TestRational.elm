@@ -1,5 +1,5 @@
 module TestRational exposing (testBigInt, testFrom, testGCD, testLCM,
-                              testAdd, testSub, 
+                              testAdd, testSub, testMul, testDiv,
                               testComp, testEqSign)
 
 import Expect exposing (Expectation)
@@ -108,7 +108,7 @@ testSub =
 
 testMul : Test
 testMul =
-    describe "Test multiply"
+    describe "Test division"
         [ test "simple mul" <|
               \_ -> mul (fromInt 45 123) (fromInt 124 29)
                     |> Expect.equal (fromInt 1860 1189)
@@ -119,7 +119,7 @@ testMul =
         
 testDiv : Test
 testDiv =
-    describe "Test multiply"
+    describe "Test divide"
         [ test "simple div" <|
               \_ -> div (fromInt 45 123) (fromInt 124 29)
                     |> Expect.equal (fromInt 435 5084)
