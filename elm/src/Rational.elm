@@ -37,18 +37,6 @@ fromBigInt n d =
 
 {- Arithmetic Operators -}
 
-addSign : Rational -> Rational -> Sign
-addSign a b = if eqSign a b then a.sign
-              else case pos a of
-                       True -> if gte a b then Pos else Neg
-                       False -> if gte b a then Pos else Neg
-
-addNums : Rational -> Rational -> BI.BigInt
-addNums a b = if eqSign a b then BI.add a.num b.num
-              else case pos a of
-                       True -> BI.sub a.num b.num |> BI.abs
-                       False -> BI.sub b.num a.num |> BI.abs
-
 addEqSign : Rational -> Rational -> Rational
 addEqSign a b =
     let s = if pos a then Pos else Neg
