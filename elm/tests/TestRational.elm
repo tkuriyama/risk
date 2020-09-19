@@ -33,7 +33,10 @@ testFrom =
                     |> Expect.equal True
         , test "zero sign bigInt" <|
               \_ -> eqSign (fromBigInt zero zero) (fromBigInt one one )
-                    |> Expect.equal True                    
+                    |> Expect.equal True
+        , test "negative bigint" <|
+              \_ -> eqSign (fromBigInt one one) (fromBigInt one (BI.fromInt (-1)) )
+                    |> Expect.equal False                                   
         ]              
       
 testGCD : Test
