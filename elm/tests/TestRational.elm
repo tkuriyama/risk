@@ -75,6 +75,9 @@ testAdd =
         , test "1/1 + -1/2 -> 1/2" <|
               \_ -> add (fromInt 1 1) (fromInt (-1) 2)
                     |> Expect.equal (fromInt 1 2)
+        , test "-1/1 + -1/2 -> -3/2" <|
+              \_ -> add (fromInt (-1) 1) (fromInt (-1) 2)
+                 |> Expect.equal (fromInt (-3) 2)  
         , test "-1/2 + 1/1 -> 1/2" <|
               \_ -> add (fromInt (-1) 2) (fromInt 1 1)
                     |> Expect.equal (fromInt 1 2)  
