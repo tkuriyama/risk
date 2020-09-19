@@ -135,6 +135,8 @@ testComp =
               \_ -> gt (fromInt 1 2) (fromInt 1 3) |> Expect.equal True
         , test "gt same sign neg" <|
              \_ -> gt (fromInt (-1) 3) (fromInt (-1) 2) |> Expect.equal True
+        , test "gt diff sign" <|
+             \_ -> gt (fromInt (-1) 3) (fromInt 1 2) |> Expect.equal False
          , test "lt" <|
               \_ -> lt (fromInt 1 3) (fromInt 1 2) |> Expect.equal True
         , test "lte pass" <|
@@ -151,9 +153,9 @@ testEqSign =
         [ test "neg and pos -> false" <|
               \_ -> eqSign (fromInt (-1) 2) (fromInt 1 2)
                     |> Expect.equal False
-        , test "abs neg and pos -> false" <|
-              \_ -> eqSign (fromInt (-1) 2 |> abs) (fromInt 1 2)
-                    |> Expect.equal True         
+        -- , test "abs neg and pos -> false" <|
+        --       \_ -> eqSign (fromInt (-1) 2 |> abs) (fromInt 1 2)
+        --             |> Expect.equal True         
         , test "neg and neg -> true" <|
               \_ -> eqSign (fromInt (-1) 2) (fromInt 1 (-2))
                     |> Expect.equal True  
