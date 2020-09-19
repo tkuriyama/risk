@@ -3,7 +3,8 @@ Rational numbers, built on top of BigInt.
 Numerators and Denominators are always stored as positive BigInts, with a sign.
 -}
 
-module Rational exposing (..)
+module Rational exposing (fromInt, fromBigInt, add, sub, mul, div,
+                          gt, gte, lt, lte, negate, absolute)
 
 import BigInt as BI
 
@@ -37,6 +38,7 @@ fromBigInt n d =
 
 {- Arithmetic Operators -}
 
+-- assumes inputs are already normalized
 addEqSign : Rational -> Rational -> Rational
 addEqSign a b =
     let s = if pos a then Pos else Neg
@@ -44,6 +46,7 @@ addEqSign a b =
        , denom = a.denom
        , sign = s }    
 
+-- assumes inputs are already normalized        
 addNotEqSign : Rational -> Rational -> Rational
 addNotEqSign a b = 
     let (x, y) = if pos a then (a, b) else (b, a)
@@ -106,6 +109,7 @@ eqSign : Rational -> Rational -> Bool
 eqSign a b = (a.sign == Pos && b.sign == Pos) ||
              (a.sign == Neg && b.sign == Neg)
 
+-- normalize to common demoninator, do not reduce                 
 normalize : Rational -> Rational -> (Rational, Rational)
 normalize a b = let d = lcm a.denom b.denom
                     n1 = BI.mul a.num (BI.div d (a.denom))
@@ -120,10 +124,12 @@ reduce r = let d = gcd r.num r.denom
               , sign = r.sign }
 
 {- Arithmetic Utilities -}
-               
+
+-- least common multiple
 lcm : BI.BigInt -> BI.BigInt -> BI.BigInt 
 lcm a b = BI.div (BI.mul a b) (gcd a b)
-      
+
+-- greater common divisor          
 gcd : BI.BigInt -> BI.BigInt -> BI.BigInt
 gcd a b = if a == zero then b
           else if b == zero then a
