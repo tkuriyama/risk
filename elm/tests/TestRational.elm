@@ -116,7 +116,17 @@ testMul =
               \_ -> mul (fromInt 45 123) (fromInt 0 1)
                     |> Expect.equal (fromInt 0 1)
         ]
-          
+        
+testDiv : Test
+testDiv =
+    describe "Test multiply"
+        [ test "simple div" <|
+              \_ -> div (fromInt 45 123) (fromInt 124 29)
+                    |> Expect.equal (fromInt 435 5084)
+        , test "div by one" <|
+              \_ -> div (fromInt 45 123) (fromInt 1 1)
+                    |> Expect.equal (fromInt 15 41)
+        ]
         
 testComp : Test
 testComp =
