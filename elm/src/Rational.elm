@@ -51,9 +51,8 @@ addNums a b = if eqSign a b then BI.add a.num b.num
 
 addEqSign : Rational -> Rational -> Rational
 addEqSign a b =
-    let f = if pos a then BI.add else BI.sub
-        s = if pos a then Pos else Neg
-    in { num = f a.num b.num
+    let s = if pos a then Pos else Neg
+    in { num = BI.add a.num b.num
        , denom = a.denom
        , sign = s }    
 
