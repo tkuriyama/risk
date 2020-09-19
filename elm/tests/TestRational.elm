@@ -153,9 +153,9 @@ testEqSign =
         [ test "neg and pos -> false" <|
               \_ -> eqSign (fromInt (-1) 2) (fromInt 1 2)
                     |> Expect.equal False
-        -- , test "abs neg and pos -> false" <|
-        --       \_ -> eqSign (fromInt (-1) 2 |> abs) (fromInt 1 2)
-        --             |> Expect.equal True         
+        , test "abs neg and pos -> false" <|
+              \_ -> eqSign (fromInt (-1) 2 |> absolute) (fromInt 1 2)
+                    |> Expect.equal True         
         , test "neg and neg -> true" <|
               \_ -> eqSign (fromInt (-1) 2) (fromInt 1 (-2))
                     |> Expect.equal True  
