@@ -28,7 +28,7 @@ losses pair =
     in (List.sum ls, List.length ls - List.sum ls)
 
 {- Probabilities -}        
-
+           
 throw : Int -> List (List DieValue)
 throw n =
     case n of           
@@ -48,17 +48,23 @@ group xs =
                 [] -> ([x], acc)
                 (y::ys) -> if x == y then ((x::y::ys), acc)
                            else ([x], (y::ys)::acc)
-    in List.foldl f ([], [[]]) xs |> (\(last, acc) -> last::acc)
+    in List.foldl f ([], []) xs |> (\(last, acc) -> last::acc)
 
+crossMap : List a -> List b -> (a -> b -> c) -> List c
+crossMap xs ys f =
+    xs |> List.concatMap (\x -> List.map (\y -> f x y) ys)
     
 pLosses : List (List DieValue) -> List (List DieValue) -> List Scenario
 pLosses xss yss =
-    let pairs = List.map2 (\xs ys -> losses (xs, ys)) xss yss
+    let pairs = crossMap xss yss (\a b -> losses (a, b))
         groups = List.sort pairs |> group
         total = rLength pairs
         genPair g = case List.head g of
                         (Just p) -> (R.div (rLength g) total, p)
                         Nothing -> (R.div (rLength g) total, (0,0))
     in List.map genPair groups
-                                 
-                                                             
+
+pDict : Dict Battlefield (List Scenario)
+pDict = let f a b = ((a, b), pLosses (throw a) (throw b))
+        in crossMap [1,2,3] [1,2] f |> Dict.fromList
+        
