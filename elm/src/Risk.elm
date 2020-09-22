@@ -37,5 +37,21 @@ throw n =
              |> List.concatMap (\d -> throw (i-1)
                                       |> List.map ((::) d))
 
-
-
+rLength : List a -> R.Rational
+rLength l = let len = List.length l
+            in R.fromInt len 1
+                
+group : List a -> List (List a)
+group xs = [[]]
+    
+pLosses : List (List DieValue) -> List (List DieValue) -> List Scenario
+pLosses xss yss =
+    let pairs = List.map2 (\xs ys -> losses (xs, ys)) xss yss
+        groups = List.sort pairs |> group
+        total = rLength pairs
+        genPair g = case List.head g of
+                        (Just p) -> (R.div (rLength g) total, p)
+                        Nothing -> (R.div (rLength g) total, (0,0))
+    in List.map genPair groups
+                                 
+                                                             
