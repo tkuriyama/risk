@@ -1,4 +1,4 @@
-module TestRisk exposing (testMaxTroops)
+module TestRisk exposing (testMaxTroops, testUpdateField, testLosses)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
