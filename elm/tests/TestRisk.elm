@@ -22,3 +22,10 @@ testUpdateField =
               \_ -> updateField (3,2) (2,1) |> Expect.equal (1,1)
         ]
         
+testLosses : Test
+testLosses =
+    describe "Test losses"
+        [ test "same length" <|
+              \_ -> losses ([3,2], [2,2]) |> Expect.equal (1,1)
+        ]
+        
