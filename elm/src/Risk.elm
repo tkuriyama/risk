@@ -7,8 +7,10 @@ type alias Losses = (Army, Army)
 type alias Battlefield = (Army, Army)
 
 type alias Probability = R.Rational
+type alias Scenario = (Probability, Losses)
 
-
+{- Utilities -}
+    
 maxTroops : Battlefield -> Battlefield
 maxTroops (a, d) = (min 3 (a-1), min 2 d)
 
@@ -23,7 +25,15 @@ losses pair =
     let (atts, defs) = applyPair (List.reverse << List.sort) pair
         ls = List.map2 (\a d -> if d >= a then 1 else 0) atts defs
     in (List.sum ls, List.length ls - List.sum ls)
-                              
+
+{- Probabilities -}        
+
+throw : Int -> List (List DieValue)
+throw n =
+    case n of
+        1 -> List.range 1 6 |> List.map (\d -> [d])
+        _ -> [[]]
+
 risk : String
 risk = ""
 
