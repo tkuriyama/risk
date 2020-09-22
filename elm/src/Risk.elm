@@ -10,14 +10,19 @@ type alias Probability = R.Rational
 
 
 maxTroops : Battlefield -> Battlefield
-maxTroops (a, b) = (min 3 (a-1), min 2 b)
+maxTroops (a, d) = (min 3 (a-1), min 2 d)
 
 updateField : Battlefield -> Losses -> Battlefield
-updateField (a, b) (al, bl) = (a - al, b - bl)
+updateField (a, d) (al, dl) = (a - al, d - dl)
 
 applyPair : (a -> b) -> (a, a) -> (b, b)
 applyPair f (a, b) = (f a, f b)            
-                              
+
+losses : (List DieValue, List DieValue) -> Losses
+losses pair =
+    let (atts, defs) = applyPair (List.reverse << List.sort) pair
+        ls = List.map2 (\a d -> if d >= a then 1 else 0) atts defs
+    in (List.sum ls, List.length ls - List.sum ls)
                               
 risk : String
 risk = ""
