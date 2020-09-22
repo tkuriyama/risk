@@ -1,5 +1,6 @@
 module Risk exposing (..)
 import Rational as R
+import Dict exposing (Dict)
 
 type alias DieValue = Int
 type alias Army = Int
@@ -36,12 +37,5 @@ throw n =
              |> List.concatMap (\d -> throw (i-1)
                                       |> List.map ((::) d))
 
-           -- 1 -> die |> List.map (\d -> [d])
-           -- 2 -> die |> List.concatMap (\d -> throw 1
-           --                                   |> List.map ((::) d))
-           -- 3 -> die |> List.concatMap (\d -> throw 2
-           --                                   |> List.map ((::) d))                
 
-risk : String
-risk = ""
 
