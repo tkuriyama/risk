@@ -14,3 +14,11 @@ testMaxTroops =
         , test "floor" <|
               \_ -> maxTroops (1, 1) |> Expect.equal (0,1)
         ]
+
+testUpdateField : Test
+testUpdateField =
+    describe "Test updateField"
+        [ test "simple update" <|
+              \_ -> updateField (3,2) (2,1) |> Expect.equal (1,1)
+        ]
+        
