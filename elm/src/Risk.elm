@@ -48,7 +48,7 @@ group xs =
                 [] -> ([x], acc)
                 (y::ys) -> if x == y then ((x::y::ys), acc)
                            else ([x], (y::ys)::acc)
-    in List.foldl f ([], [[]]) xs |> (\(_, acc) -> acc)
+    in List.foldl f ([], [[]]) xs |> (\(last, acc) -> last::acc)
 
     
 pLosses : List (List DieValue) -> List (List DieValue) -> List Scenario
