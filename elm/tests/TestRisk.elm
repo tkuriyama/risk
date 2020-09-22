@@ -36,4 +36,6 @@ testThrow =
     describe "Test throw"
         [ test "single die" <|
               \_ -> throw 1 |> Expect.equal [[1], [2], [3], [4], [5], [6]]
+        , test "double dice" <|
+              \_ -> throw 2 |> List.length |> Expect.equal 36
         ]
