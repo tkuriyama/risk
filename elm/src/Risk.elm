@@ -42,7 +42,14 @@ rLength l = let len = List.length l
             in R.fromInt len 1
                 
 group : List a -> List (List a)
-group xs = [[]]
+group xs =
+    let f x (cur, acc) =
+            case cur of
+                [] -> ([x], acc)
+                (y::ys) -> if x == y then ((x::y::ys), acc)
+                           else ([x], (y::ys)::acc)
+    in List.foldl f ([], [[]]) xs |> (\(_, acc) -> acc)
+
     
 pLosses : List (List DieValue) -> List (List DieValue) -> List Scenario
 pLosses xss yss =
