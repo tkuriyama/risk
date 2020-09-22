@@ -4,7 +4,8 @@ Numerators and Denominators are always stored as positive BigInts, with a sign.
 -}
 
 module Rational exposing (fromInt, fromBigInt, add, sub, mul, div,
-                          gt, gte, lt, lte, negate, absolute)
+                          gt, gte, lt, lte, negate, absolute,
+                          eqSign, gcd, lcm)
 
 import BigInt as BI
 
