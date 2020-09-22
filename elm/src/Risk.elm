@@ -30,9 +30,11 @@ losses pair =
 
 throw : Int -> List (List DieValue)
 throw n =
-    case n of
-        1 -> List.range 1 6 |> List.map (\d -> [d])
-        _ -> [[]]
+    let die = List.range 1 6
+    in case n of
+           1 -> die |> List.map (\d -> [d])
+           2 -> die |> List.concatMap (\d -> List.map ((::) d) <| throw 1)
+           _ -> [[]]
 
 risk : String
 risk = ""
