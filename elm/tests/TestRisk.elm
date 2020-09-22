@@ -1,4 +1,4 @@
-module TestRisk exposing (testMaxTroops, testUpdateField, testLosses)
+module TestRisk exposing (testMaxTroops, testUpdateField, testLosses, testThrow)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -31,3 +31,9 @@ testLosses =
               \_ -> losses ([3,2,1], [2,2]) |> Expect.equal (1,1)
         ]
         
+testThrow : Test
+testThrow =
+    describe "Test throw"
+        [ test "single die" <|
+              \_ -> throw 1 |> Expect.equal [[1], [2], [3], [4], [5], [6]]
+        ]
