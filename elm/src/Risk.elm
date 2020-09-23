@@ -2,6 +2,15 @@ module Risk exposing (..)
 import Rational as R
 import Dict exposing (Dict)
 
+{- Model / Msg Types -}
+
+type alias Model = Battlefield
+
+type Msg = IncrementA | DecrementA
+         | IncrementD | DecrementD
+           
+{- Risk Types -} 
+
 type alias DieValue = Int
 type alias Army = Int
 type alias Losses = (Army, Army)    
