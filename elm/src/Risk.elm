@@ -21,7 +21,21 @@ type alias Scenario = (Probability, Losses)
 
 type PTree = Node Probability (List PTree)
 
-{- Utilities -}
+{- Tree Utilities -}
+
+intMax : List Int -> Int
+intMax xs = case List.maximum xs of
+                 Just x -> x
+                 Nothing -> 0
+
+maxDepth : PTree -> Int
+maxDepth (Node p ts) = 
+    case ts of
+        [] -> 1
+        xs -> 1 + (List.map maxDepth xs |> intMax)
+
+    
+{- Risk Utilities -}
     
 maxTroops : Battlefield -> Battlefield
 maxTroops (a, d) = (min 3 (a-1), min 2 d)

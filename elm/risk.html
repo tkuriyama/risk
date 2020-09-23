@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <script src="elm.js"></script>
+    <style>
+      .infoText {
+	  font: 12px sans-serif;
+	  font-family: consolas;
+      }
+      
+      #container {
+	  width: 1000px;
+	  height: 800px;
+      }      
+      #elm {
+      }
+      body {
+      	  background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <br>
+      <br>
+      <br>
+
+    <div id="elm"></div>
+    
+    <script>
+       var app = Elm.Main.init({ node: document.getElementById("elm") });
+    </script>
+
+    </div>
+  </body>
+</html>
