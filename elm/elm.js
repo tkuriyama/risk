@@ -6568,7 +6568,7 @@ var $author$project$Show$showExact = F3(
 					$elm_community$typed_svg$TypedSvg$Attributes$x(
 					$elm_community$typed_svg$TypedSvg$Types$px(w - 50)),
 					$elm_community$typed_svg$TypedSvg$Attributes$y(
-					$elm_community$typed_svg$TypedSvg$Types$px(h + 5)),
+					$elm_community$typed_svg$TypedSvg$Types$px(5)),
 					$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
 					$elm_community$typed_svg$TypedSvg$Types$px(12)),
 					$elm_community$typed_svg$TypedSvg$Attributes$class(
