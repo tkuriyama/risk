@@ -33,7 +33,7 @@ view model =
         , text ("A: " ++ String.fromInt (fst model))
         , button [ onClick IncrementA ] [ text "+" ]
         , button [ onClick DecrementD ] [ text "-" ]
-        , text ("B: " ++ String.fromInt (fst model))
+        , text ("B: " ++ String.fromInt (snd model))
         , button [ onClick IncrementD ] [ text "+" ]            
 --        , svg [ viewBox 0 0 1100 800 ] (render 750 750 m) 
         ]

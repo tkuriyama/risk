@@ -5200,6 +5200,10 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $author$project$Main$snd = function (_v0) {
+	var d = _v0.b;
+	return d;
+};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Main$view = function (model) {
@@ -5243,7 +5247,7 @@ var $author$project$Main$view = function (model) {
 					])),
 				$elm$html$Html$text(
 				'B: ' + $elm$core$String$fromInt(
-					$author$project$Main$fst(model))),
+					$author$project$Main$snd(model))),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
