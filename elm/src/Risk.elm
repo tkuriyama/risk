@@ -70,3 +70,7 @@ pDict : Dict Battlefield (List Scenario)
 pDict = let f a b = ((a, b), pLosses (throw a) (throw b))
         in crossMap [1,2,3] [1,2] f |> Dict.fromList
         
+agg : PTree -> Probability
+agg (Node p ts) =
+    let pSum = List.map agg ts|> List.foldr (R.add) (R.fromInt 0 1)
+    in R.mul p pSum
