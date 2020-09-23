@@ -1,5 +1,5 @@
 module TestRisk exposing (testMaxTroops, testUpdateField, testLosses,
-                          testThrow, testPLosses)
+                          testThrow, testPLosses, testAgg)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -51,4 +51,13 @@ testPLosses =
                                     , (fromInt 35 108, (1,1))
                                     , (fromInt 295 1296, (0,2)) 
                                     ]
+        ]
+
+t = Node (Rational.fromInt 1 2) [(Node (Rational.fromInt 1 4) [])]
+    
+testAgg : Test
+testAgg =
+    describe "Test basic PTree aggregation"
+        [ test "1/2 * 1/4 = 1/8" <|
+              \_ -> agg t |> Expect.equal (Rational.fromInt 1 8)
         ]

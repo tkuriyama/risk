@@ -72,5 +72,7 @@ pDict = let f a b = ((a, b), pLosses (throw a) (throw b))
         
 agg : PTree -> Probability
 agg (Node p ts) =
-    let pSum = List.map agg ts|> List.foldr (R.add) (R.fromInt 0 1)
-    in R.mul p pSum
+    case ts of
+        [] -> p
+        xs -> let f t acc = R.add acc (R.mul p (agg t))
+              in List.foldr f (R.fromInt 0 1) xs
