@@ -1,9 +1,11 @@
-module TestRisk exposing (testMaxTroops, testUpdateField, testLosses, testThrow)
+module TestRisk exposing (testMaxTroops, testUpdateField, testLosses,
+                          testThrow, testPLosses)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
+import Rational exposing (..)
 import Risk exposing (..)
 
 testMaxTroops : Test
@@ -38,4 +40,15 @@ testThrow =
               \_ -> throw 1 |> Expect.equal [[1], [2], [3], [4], [5], [6]]
         , test "double dice" <|
               \_ -> throw 2 |> List.length |> Expect.equal 36
+        ]
+
+testPLosses : Test
+testPLosses =
+    describe "Test pLosses"
+        [ test "pLosses 2 2" <|
+              \_ -> pLosses (throw 2) (throw 2)
+                    |> Expect.equal [ (fromInt 581 1296, (2,0))
+                                    , (fromInt 35 108, (1,1))
+                                    , (fromInt 295 1296, (0,2)) 
+                                    ]
         ]
