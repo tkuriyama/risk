@@ -35,7 +35,7 @@ view model =
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd model))
         , button [ onClick IncrementD ] [ text "+" ]            
---        , svg [ viewBox 0 0 1100 800 ] (render 750 750 m) 
+        , svg [ viewBox 0 0 1100 800 ] (render 750 750 model) 
         ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
