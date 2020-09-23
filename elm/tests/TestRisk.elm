@@ -1,5 +1,5 @@
 module TestRisk exposing (testMaxTroops, testUpdateField, testLosses,
-                          testThrow, testPLosses, testAgg)
+                          testThrow, testPLosses, testAgg, testPAWin)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
@@ -60,4 +60,12 @@ testAgg =
     describe "Test basic PTree aggregation"
         [ test "1/2 * 1/4 = 1/8" <|
               \_ -> agg t |> Expect.equal (Rational.fromInt 1 8)
+        ]
+
+testPAWin : Test
+testPAWin =
+    describe "Test pAWin" 
+        [ test "Test case for (5,5)" <|
+              \_ -> pAWin (5,5) |> agg |> Rational.toString
+                   |> Expect.equal "1311121206180325 % 3656158440062976"
         ]
