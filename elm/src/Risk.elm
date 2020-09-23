@@ -10,6 +10,8 @@ type alias Battlefield = (Army, Army)
 type alias Probability = R.Rational
 type alias Scenario = (Probability, Losses)
 
+type PTree = Node Probability (List PTree)
+
 {- Utilities -}
     
 maxTroops : Battlefield -> Battlefield
