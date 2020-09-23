@@ -76,3 +76,26 @@ agg (Node p ts) =
         [] -> p
         xs -> let f t acc = R.add acc (R.mul p (agg t))
               in List.foldr f (R.fromInt 0 1) xs
+
+nodeZero = Node (R.fromInt 0 1) []
+
+aLoses : Battlefield -> Scenario -> Bool
+aLoses (a, d) (_, (aLoss, dLoss)) =
+    if d - dLoss <= 0 then False else a - aLoss <= 1
+          
+genTree : Battlefield -> Probability -> PTree
+genTree b p0 =
+    case b of
+        (_, 0) -> Node p0 []
+        (1, _) -> nodeZero
+        _ -> case Dict.get (maxTroops b) pDict of
+                 Nothing -> nodeZero
+                 Just pairs ->
+                     let update (p, ls) = (p, updateField b ls)
+                         branch (p, bNext) = genTree bNext p
+                     in List.filter (not << aLoses b) pairs
+                        |> List.map update
+                        |> List.map branch
+                        |> Node p0
+
+pAWin b = genTree b (R.fromInt 1 1)
