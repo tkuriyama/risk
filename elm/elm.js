@@ -6498,14 +6498,6 @@ var $elm_community$typed_svg$TypedSvg$Types$Px = function (a) {
 	return {$: 9, a: a};
 };
 var $elm_community$typed_svg$TypedSvg$Types$px = $elm_community$typed_svg$TypedSvg$Types$Px;
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm_community$typed_svg$TypedSvg$Core$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
-	return _VirtualDom_nodeNS(
-		_VirtualDom_noScript(tag));
-};
-var $elm_community$typed_svg$TypedSvg$Core$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
-var $elm_community$typed_svg$TypedSvg$text_ = $elm_community$typed_svg$TypedSvg$Core$node('text');
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
 	switch (length.$) {
@@ -6541,6 +6533,20 @@ var $elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (
 			return $elm$core$String$fromFloat(x) + 'px';
 	}
 };
+var $elm_community$typed_svg$TypedSvg$Attributes$strokeWidth = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'stroke-width',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm_community$typed_svg$TypedSvg$Core$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
+	return _VirtualDom_nodeNS(
+		_VirtualDom_noScript(tag));
+};
+var $elm_community$typed_svg$TypedSvg$Core$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
+var $elm_community$typed_svg$TypedSvg$text_ = $elm_community$typed_svg$TypedSvg$Core$node('text');
 var $elm_community$typed_svg$TypedSvg$Attributes$x = function (length) {
 	return A2(
 		$elm_community$typed_svg$TypedSvg$Core$attribute,
@@ -6563,6 +6569,8 @@ var $author$project$Show$showExact = F3(
 					$elm_community$typed_svg$TypedSvg$Types$px(w - 50)),
 					$elm_community$typed_svg$TypedSvg$Attributes$y(
 					$elm_community$typed_svg$TypedSvg$Types$px(h + 5)),
+					$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
+					$elm_community$typed_svg$TypedSvg$Types$px(12)),
 					$elm_community$typed_svg$TypedSvg$Attributes$class(
 					_List_fromArray(
 						['infoText']))
@@ -6639,11 +6647,11 @@ var $author$project$Rational$toString = function (r) {
 var $author$project$Show$render = F3(
 	function (w, h, m) {
 		var t = $author$project$Risk$pAWin(m);
-		var r = $author$project$Rational$toString(
+		var s = $author$project$Rational$toString(
 			$author$project$Risk$agg(t));
 		return _List_fromArray(
 			[
-				A3($author$project$Show$showExact, w, h, r)
+				A3($author$project$Show$showExact, w, h, s)
 			]);
 	});
 var $author$project$Main$snd = function (_v0) {
