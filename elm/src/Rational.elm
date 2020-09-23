@@ -3,7 +3,8 @@ Rational numbers, built on top of BigInt.
 Numerators and Denominators are always stored as positive BigInts, with a sign.
 -}
 
-module Rational exposing (fromInt, fromBigInt, add, sub, mul, div,
+module Rational exposing (fromInt, fromBigInt, toString,
+                          add, sub, mul, div,
                           gt, gte, lt, lte, negate, absolute,
                           eqSign, gcd, lcm, Rational)
 
@@ -37,6 +38,9 @@ fromBigInt n d =
        , denom = BI.abs d
        , sign = s }
 
+toString : Rational -> String
+toString r = BI.toString r.num ++ " % " ++ BI.toString r.denom           
+        
 {- Arithmetic Operators -}
 
 -- assumes inputs are already normalized
