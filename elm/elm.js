@@ -6611,7 +6611,7 @@ var $author$project$Show$showLeaf = F5(
 			_List_fromArray(
 				[
 					$elm_community$typed_svg$TypedSvg$Attributes$x(
-					$elm_community$typed_svg$TypedSvg$Types$px(xStart)),
+					$elm_community$typed_svg$TypedSvg$Types$px((xStart + xEnd) / 2)),
 					$elm_community$typed_svg$TypedSvg$Attributes$y(
 					$elm_community$typed_svg$TypedSvg$Types$px(yStart)),
 					$elm_community$typed_svg$TypedSvg$Attributes$class(
@@ -6624,12 +6624,12 @@ var $author$project$Show$showLeaf = F5(
 				]));
 	});
 var $author$project$Show$showBranch = F5(
-	function (xStart, xEnd, yStart, yInc, t0) {
-		var p = t0.a;
-		var ts = t0.b;
+	function (xStart, xEnd, yStart, yInc, _v0) {
+		var p = _v0.a;
+		var ts = _v0.b;
 		var yStart2 = yStart + yInc;
 		var len = $elm$core$List$length(ts);
-		var xInc = (xEnd - xStart) - len;
+		var xInc = (xEnd - xStart) / len;
 		var xStart2s = A2(
 			$elm$core$List$map,
 			function (i) {
@@ -6648,9 +6648,10 @@ var $author$project$Show$showBranch = F5(
 	});
 var $author$project$Show$showTree = F3(
 	function (w, h, t) {
+		var yStart = 25;
 		var depth = $author$project$Risk$maxDepth(t);
-		var yInc = ((h - $author$project$Show$textY) - 10) / depth;
-		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + 10, yInc, t);
+		var yInc = A2($elm$core$Basics$min, 100, ((h - $author$project$Show$textY) - yStart) / depth);
+		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + yStart, yInc, t);
 	});
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
