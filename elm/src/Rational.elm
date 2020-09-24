@@ -3,12 +3,13 @@ Rational numbers, built on top of BigInt.
 Numerators and Denominators are always stored as positive BigInts, with a sign.
 -}
 
-module Rational exposing (fromInt, fromBigInt, toString,
+module Rational exposing (fromInt, fromBigInt, toInt, toFloatN, toString, 
                           add, sub, mul, div,
                           gt, gte, lt, lte, negate, absolute,
                           eqSign, gcd, lcm, Rational)
 
 import BigInt as BI
+import String
 
 type alias Numerator = BI.BigInt
 type alias Denominator = BI.BigInt
@@ -38,6 +39,27 @@ fromBigInt n d =
        , denom = BI.abs d
        , sign = s }
 
+toFloatN : Int -> Rational -> Float
+toFloatN n r =
+    let dp = 10^n
+    in BI.div (BI.mul (BI.fromInt dp) r.num) r.denom 
+        |> BI.toString |> strToFloat |> (\x -> x / (toFloat dp))
+        
+toInt : Rational -> Int
+toInt r = BI.div r.num r.denom |> BI.toString |> strToInt
+
+strToFloat : String -> Float
+strToFloat s = let x = String.toFloat s
+               in case x of
+                      Nothing -> 0.0
+                      Just f -> f
+                
+strToInt : String -> Int
+strToInt s = let x = String.toInt s
+             in case x of
+                    Nothing -> 0
+                    Just n -> n
+                
 toString : Rational -> String
 toString r = BI.toString r.num ++ " % " ++ BI.toString r.denom           
         
