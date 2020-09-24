@@ -1,4 +1,4 @@
-module TestRational exposing (testBigInt, testFrom, testToInt, 
+module TestRational exposing (testBigInt, testFrom, testToInt, testToFloatN,
                               testGCD, testLCM,
                               testAdd, testSub, testMul, testDiv,
                               testComp, testEqSign)
@@ -47,6 +47,17 @@ testToInt =
               \_ -> fromInt 1 1 |> toInt |> Expect.equal 1
         , test "toInt 4/3 -> 1" <|
               \_ -> fromInt 4 3 |> toInt |> Expect.equal 1
+        ]
+
+testToFloatN : Test
+testToFloatN =
+    describe "test toFloatN"
+        [ test "toFloat 1 1" <|
+              \_ -> fromInt 1 1 |> toFloatN 1
+                    |> Expect.within (Expect.Absolute 0.000000001) 1.0
+        , test "toFloat 3 123/1000" <|
+              \_ -> fromInt 123 1000 |> toFloatN 3
+                    |> Expect.within (Expect.Absolute 0.000000001) 0.123
         ]
 
         
