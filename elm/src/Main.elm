@@ -44,7 +44,7 @@ update msg (a, d) =
         IncrementA -> ((a+1, d), Cmd.none)
         DecrementA -> if a > 2 then ((a-1, d), Cmd.none) else ((a, d), Cmd.none)
         IncrementD -> ((a, d+1), Cmd.none)
-        DecrementD -> if d > 2 then ((a, d-1), Cmd.none) else ((a, d), Cmd.none)
+        DecrementD -> if d > 1 then ((a, d-1), Cmd.none) else ((a, d), Cmd.none)
 
 -- subscriptions : Model -> Sub Msg
 -- subscriptions model =
