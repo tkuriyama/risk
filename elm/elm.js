@@ -5203,7 +5203,7 @@ var $author$project$Main$update = F2(
 					_Utils_Tuple2(a, d + 1),
 					$elm$core$Platform$Cmd$none);
 			default:
-				return (d > 2) ? _Utils_Tuple2(
+				return (d > 1) ? _Utils_Tuple2(
 					_Utils_Tuple2(a, d - 1),
 					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
 					_Utils_Tuple2(a, d),
@@ -6604,55 +6604,22 @@ var $author$project$Risk$maxDepth = function (_v0) {
 			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
 	}
 };
-var $author$project$Show$showLeaf = F5(
-	function (p, xStart, xEnd, yStart, yInc) {
-		return A2(
-			$elm_community$typed_svg$TypedSvg$text_,
-			_List_fromArray(
-				[
-					$elm_community$typed_svg$TypedSvg$Attributes$x(
-					$elm_community$typed_svg$TypedSvg$Types$px((xStart + xEnd) / 2)),
-					$elm_community$typed_svg$TypedSvg$Attributes$y(
-					$elm_community$typed_svg$TypedSvg$Types$px(yStart)),
-					$elm_community$typed_svg$TypedSvg$Attributes$class(
-					_List_fromArray(
-						['infoText']))
-				]),
-			_List_fromArray(
-				[
-					$elm_community$typed_svg$TypedSvg$Core$text('leaf')
-				]));
-	});
-var $author$project$Show$showBranch = F5(
-	function (xStart, xEnd, yStart, yInc, _v0) {
-		var p = _v0.a;
-		var ts = _v0.b;
-		var yStart2 = yStart + yInc;
-		var len = $elm$core$List$length(ts);
-		var xInc = (xEnd - xStart) / len;
-		var xStart2s = A2(
-			$elm$core$List$map,
-			function (i) {
-				return xStart + (xInc * (i - 1));
-			},
-			A2($elm$core$List$range, 1, len));
-		var f = F2(
-			function (t, xStart2) {
-				return A5($author$project$Show$showBranch, xStart2, xStart2 + xInc, yStart + yInc, yInc, t);
-			});
-		return A2(
-			$elm$core$List$cons,
-			A5($author$project$Show$showLeaf, p, xStart, xEnd, yStart, yInc),
-			$elm$core$List$concat(
-				A3($elm$core$List$map2, f, ts, xStart2s)));
-	});
-var $author$project$Show$showTree = F3(
-	function (w, h, t) {
-		var yStart = 25;
-		var depth = $author$project$Risk$maxDepth(t);
-		var yInc = A2($elm$core$Basics$min, 100, ((h - $author$project$Show$textY) - yStart) / depth);
-		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + yStart, yInc, t);
-	});
+var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
+	return {$: 0, a: a};
+};
+var $elm_community$typed_svg$TypedSvg$Types$Paint = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$String$toFloat = _String_toFloat;
+var $author$project$Rational$strToFloat = function (s) {
+	var x = $elm$core$String$toFloat(s);
+	if (x.$ === 1) {
+		return 0.0;
+	} else {
+		var f = x.a;
+		return f;
+	}
+};
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
 };
@@ -6714,6 +6681,220 @@ var $cmditch$elm_bigint$BigInt$toString = function (bigInt) {
 			return '-' + $cmditch$elm_bigint$BigInt$revMagnitudeToString(mag);
 	}
 };
+var $author$project$Rational$toFloatN = F2(
+	function (n, r) {
+		var dp = A2($elm$core$Basics$pow, 10, n);
+		return function (x) {
+			return x / dp;
+		}(
+			$author$project$Rational$strToFloat(
+				$cmditch$elm_bigint$BigInt$toString(
+					A2(
+						$cmditch$elm_bigint$BigInt$div,
+						A2(
+							$cmditch$elm_bigint$BigInt$mul,
+							$cmditch$elm_bigint$BigInt$fromInt(dp),
+							r.a),
+						r.b))));
+	});
+var $author$project$Show$aggLevel = F2(
+	function (p0, xs) {
+		var f = F2(
+			function (_v0, acc) {
+				var p = _v0.a;
+				return A2(
+					$author$project$Rational$add,
+					A2($author$project$Rational$mul, p0, p),
+					acc);
+			});
+		return A2(
+			$author$project$Rational$toFloatN,
+			5,
+			A3(
+				$elm$core$List$foldr,
+				f,
+				A2($author$project$Rational$fromInt, 0, 1),
+				xs));
+	});
+var $elm$core$Basics$round = _Basics_round;
+var $avh4$elm_color$Color$toCssString = function (_v0) {
+	var r = _v0.a;
+	var g = _v0.b;
+	var b = _v0.c;
+	var a = _v0.d;
+	var roundTo = function (x) {
+		return $elm$core$Basics$round(x * 1000) / 1000;
+	};
+	var pct = function (x) {
+		return $elm$core$Basics$round(x * 10000) / 100;
+	};
+	return $elm$core$String$concat(
+		_List_fromArray(
+			[
+				'rgba(',
+				$elm$core$String$fromFloat(
+				pct(r)),
+				'%,',
+				$elm$core$String$fromFloat(
+				pct(g)),
+				'%,',
+				$elm$core$String$fromFloat(
+				pct(b)),
+				'%,',
+				$elm$core$String$fromFloat(
+				roundTo(a)),
+				')'
+			]));
+};
+var $elm_community$typed_svg$TypedSvg$TypesToStrings$paintToString = function (paint) {
+	switch (paint.$) {
+		case 0:
+			var color = paint.a;
+			return $avh4$elm_color$Color$toCssString(color);
+		case 1:
+			var string = paint.a;
+			return $elm$core$String$concat(
+				_List_fromArray(
+					['url(#', string, ')']));
+		case 2:
+			return 'context-fill';
+		case 3:
+			return 'context-stroke';
+		default:
+			return 'none';
+	}
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$fill = A2(
+	$elm$core$Basics$composeL,
+	$elm_community$typed_svg$TypedSvg$Core$attribute('fill'),
+	$elm_community$typed_svg$TypedSvg$TypesToStrings$paintToString);
+var $elm_community$typed_svg$TypedSvg$Attributes$height = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'height',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $avh4$elm_color$Color$RgbaSpace = F4(
+	function (a, b, c, d) {
+		return {$: 0, a: a, b: b, c: c, d: d};
+	});
+var $avh4$elm_color$Color$lightGreen = A4($avh4$elm_color$Color$RgbaSpace, 138 / 255, 226 / 255, 52 / 255, 1.0);
+var $avh4$elm_color$Color$lightRed = A4($avh4$elm_color$Color$RgbaSpace, 239 / 255, 41 / 255, 41 / 255, 1.0);
+var $elm_community$typed_svg$TypedSvg$TypesToStrings$opacityToString = function (opacity) {
+	if (!opacity.$) {
+		var n = opacity.a;
+		return $elm$core$String$fromFloat(n);
+	} else {
+		return 'inherit';
+	}
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$opacity = A2(
+	$elm$core$Basics$composeL,
+	$elm_community$typed_svg$TypedSvg$Core$attribute('opacity'),
+	$elm_community$typed_svg$TypedSvg$TypesToStrings$opacityToString);
+var $elm_community$typed_svg$TypedSvg$rect = $elm_community$typed_svg$TypedSvg$Core$node('rect');
+var $elm_community$typed_svg$TypedSvg$Attributes$rx = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'rx',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$strokeWidth = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'stroke-width',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$width = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'width',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $author$project$Show$showLeaf = F6(
+	function (p, ts, xStart, xEnd, yStart, yInc) {
+		var xOffset = (xEnd - xStart) * 0.1;
+		var xLen = (xEnd - xStart) - (xOffset * 2);
+		var pNotLose = _Utils_eq(ts, _List_Nil) ? 1.0 : A2($author$project$Show$aggLevel, p, ts);
+		var xLenW = xLen * pNotLose;
+		var xLenL = xLen - xLenW;
+		return _List_fromArray(
+			[
+				A2(
+				$elm_community$typed_svg$TypedSvg$rect,
+				_List_fromArray(
+					[
+						$elm_community$typed_svg$TypedSvg$Attributes$x(
+						$elm_community$typed_svg$TypedSvg$Types$px(xStart + xOffset)),
+						$elm_community$typed_svg$TypedSvg$Attributes$y(
+						$elm_community$typed_svg$TypedSvg$Types$px(yStart)),
+						$elm_community$typed_svg$TypedSvg$Attributes$width(
+						$elm_community$typed_svg$TypedSvg$Types$px(xLenW)),
+						$elm_community$typed_svg$TypedSvg$Attributes$height(
+						$elm_community$typed_svg$TypedSvg$Types$px(yInc * 0.5)),
+						$elm_community$typed_svg$TypedSvg$Attributes$rx(
+						$elm_community$typed_svg$TypedSvg$Types$px(2)),
+						$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
+						$elm_community$typed_svg$TypedSvg$Types$px(1.5)),
+						$elm_community$typed_svg$TypedSvg$Attributes$fill(
+						$elm_community$typed_svg$TypedSvg$Types$Paint($avh4$elm_color$Color$lightGreen)),
+						$elm_community$typed_svg$TypedSvg$Attributes$opacity(
+						$elm_community$typed_svg$TypedSvg$Types$Opacity(0.5))
+					]),
+				_List_Nil),
+				A2(
+				$elm_community$typed_svg$TypedSvg$rect,
+				_List_fromArray(
+					[
+						$elm_community$typed_svg$TypedSvg$Attributes$x(
+						$elm_community$typed_svg$TypedSvg$Types$px((xStart + xOffset) + xLenW)),
+						$elm_community$typed_svg$TypedSvg$Attributes$y(
+						$elm_community$typed_svg$TypedSvg$Types$px(yStart)),
+						$elm_community$typed_svg$TypedSvg$Attributes$width(
+						$elm_community$typed_svg$TypedSvg$Types$px(xLenL)),
+						$elm_community$typed_svg$TypedSvg$Attributes$height(
+						$elm_community$typed_svg$TypedSvg$Types$px(yInc * 0.5)),
+						$elm_community$typed_svg$TypedSvg$Attributes$rx(
+						$elm_community$typed_svg$TypedSvg$Types$px(2)),
+						$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
+						$elm_community$typed_svg$TypedSvg$Types$px(1.5)),
+						$elm_community$typed_svg$TypedSvg$Attributes$fill(
+						$elm_community$typed_svg$TypedSvg$Types$Paint($avh4$elm_color$Color$lightRed)),
+						$elm_community$typed_svg$TypedSvg$Attributes$opacity(
+						$elm_community$typed_svg$TypedSvg$Types$Opacity(0.5))
+					]),
+				_List_Nil)
+			]);
+	});
+var $author$project$Show$showBranch = F5(
+	function (xStart, xEnd, yStart, yInc, _v0) {
+		var p = _v0.a;
+		var ts = _v0.b;
+		var yStart2 = yStart + yInc;
+		var len = $elm$core$List$length(ts);
+		var xInc = (xEnd - xStart) / len;
+		var xStart2s = A2(
+			$elm$core$List$map,
+			function (i) {
+				return xStart + (xInc * (i - 1));
+			},
+			A2($elm$core$List$range, 1, len));
+		var f = F2(
+			function (t, xStart2) {
+				return A5($author$project$Show$showBranch, xStart2, xStart2 + xInc, yStart + yInc, yInc, t);
+			});
+		return _Utils_ap(
+			A6($author$project$Show$showLeaf, p, ts, xStart, xEnd, yStart, yInc),
+			$elm$core$List$concat(
+				A3($elm$core$List$map2, f, ts, xStart2s)));
+	});
+var $author$project$Show$showTree = F3(
+	function (w, h, t) {
+		var yStart = 25;
+		var depth = $author$project$Risk$maxDepth(t);
+		var yInc = A2($elm$core$Basics$min, 100, ((h - $author$project$Show$textY) - yStart) / depth);
+		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + yStart, yInc, t);
+	});
 var $author$project$Rational$toString = function (r) {
 	return $cmditch$elm_bigint$BigInt$toString(r.a) + (' % ' + $cmditch$elm_bigint$BigInt$toString(r.b));
 };

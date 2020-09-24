@@ -1,4 +1,5 @@
-module TestRational exposing (testBigInt, testFrom, testGCD, testLCM,
+module TestRational exposing (testBigInt, testFrom, testToInt, 
+                              testGCD, testLCM,
                               testAdd, testSub, testMul, testDiv,
                               testComp, testEqSign)
 
@@ -38,7 +39,17 @@ testFrom =
               \_ -> eqSign (fromBigInt one one) (fromBigInt one (BI.fromInt (-1)) )
                     |> Expect.equal False                                   
         ]              
-      
+
+testToInt : Test
+testToInt =
+    describe "test toInt"
+        [ test "toInt 1" <|
+              \_ -> fromInt 1 1 |> toInt |> Expect.equal 1
+        , test "toInt 4/3 -> 1" <|
+              \_ -> fromInt 4 3 |> toInt |> Expect.equal 1
+        ]
+
+        
 testGCD : Test
 testGCD =
     describe "Test GCD"

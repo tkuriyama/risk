@@ -28,14 +28,14 @@ showText w h s =
 
 {- Show Tree -}
 
-aggLevel : List PTree -> Float
-aggLevel xs = let f (Node p _) acc = R.add p acc
-              in List.foldr f (R.fromInt 0 1) xs |> R.toFloatN 3           
+aggLevel : R.Rational -> List PTree -> Float
+aggLevel p0 xs = let f (Node p _) acc = R.add (R.mul p0 p) acc
+                 in List.foldr f (R.fromInt 0 1) xs |> R.toFloatN 5          
 
 showLeaf : R.Rational -> List PTree -> Float -> Float -> Float -> Float ->
            List (Svg msg)
 showLeaf p ts xStart xEnd yStart yInc =
-    let pNotLose = if ts == [] then 1.0 else aggLevel ts
+    let pNotLose = if ts == [] then 1.0 else aggLevel p ts
         xOffset = (xEnd - xStart) * 0.1
         xLen = xEnd - xStart - (xOffset * 2)
         xLenW = xLen * pNotLose
