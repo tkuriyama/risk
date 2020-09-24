@@ -6500,6 +6500,7 @@ var $elm_community$typed_svg$TypedSvg$Types$Px = function (a) {
 var $elm_community$typed_svg$TypedSvg$Types$px = $elm_community$typed_svg$TypedSvg$Types$Px;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm_community$typed_svg$TypedSvg$Core$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Show$textY = 10;
 var $elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
 	return _VirtualDom_nodeNS(
 		_VirtualDom_noScript(tag));
@@ -6563,7 +6564,7 @@ var $author$project$Show$showText = F3(
 					$elm_community$typed_svg$TypedSvg$Attributes$x(
 					$elm_community$typed_svg$TypedSvg$Types$px((w / 2) - (sWidth / 2))),
 					$elm_community$typed_svg$TypedSvg$Attributes$y(
-					$elm_community$typed_svg$TypedSvg$Types$px(10)),
+					$elm_community$typed_svg$TypedSvg$Types$px($author$project$Show$textY)),
 					$elm_community$typed_svg$TypedSvg$Attributes$class(
 					_List_fromArray(
 						['infoText']))
@@ -6573,12 +6574,83 @@ var $author$project$Show$showText = F3(
 					$elm_community$typed_svg$TypedSvg$Core$text(s)
 				]));
 	});
+var $elm$core$List$maximum = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(
+			A3($elm$core$List$foldl, $elm$core$Basics$max, x, xs));
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Risk$intMax = function (xs) {
+	var _v0 = $elm$core$List$maximum(xs);
+	if (!_v0.$) {
+		var x = _v0.a;
+		return x;
+	} else {
+		return 0;
+	}
+};
+var $author$project$Risk$maxDepth = function (_v0) {
+	var p = _v0.a;
+	var ts = _v0.b;
+	if (!ts.b) {
+		return 1;
+	} else {
+		var xs = ts;
+		return 1 + $author$project$Risk$intMax(
+			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
+	}
+};
+var $author$project$Show$showLeaf = F5(
+	function (p, xStart, xEnd, yStart, yInc) {
+		return A2(
+			$elm_community$typed_svg$TypedSvg$text_,
+			_List_fromArray(
+				[
+					$elm_community$typed_svg$TypedSvg$Attributes$x(
+					$elm_community$typed_svg$TypedSvg$Types$px(xStart)),
+					$elm_community$typed_svg$TypedSvg$Attributes$y(
+					$elm_community$typed_svg$TypedSvg$Types$px(yStart)),
+					$elm_community$typed_svg$TypedSvg$Attributes$class(
+					_List_fromArray(
+						['infoText']))
+				]),
+			_List_fromArray(
+				[
+					$elm_community$typed_svg$TypedSvg$Core$text('leaf')
+				]));
+	});
+var $author$project$Show$showBranch = F5(
+	function (xStart, xEnd, yStart, yInc, t0) {
+		var p = t0.a;
+		var ts = t0.b;
+		var yStart2 = yStart + yInc;
+		var len = $elm$core$List$length(ts);
+		var xInc = (xEnd - xStart) - len;
+		var xStart2s = A2(
+			$elm$core$List$map,
+			function (i) {
+				return xStart + (xInc * (i - 1));
+			},
+			A2($elm$core$List$range, 1, len));
+		var f = F2(
+			function (t, xStart2) {
+				return A5($author$project$Show$showBranch, xStart2, xStart2 + xInc, yStart + yInc, yInc, t);
+			});
+		return A2(
+			$elm$core$List$cons,
+			A5($author$project$Show$showLeaf, p, xStart, xEnd, yStart, yInc),
+			$elm$core$List$concat(
+				A3($elm$core$List$map2, f, ts, xStart2s)));
+	});
 var $author$project$Show$showTree = F3(
-	function (w, h, m) {
-		return _List_fromArray(
-			[
-				A2($elm_community$typed_svg$TypedSvg$text_, _List_Nil, _List_Nil)
-			]);
+	function (w, h, t) {
+		var depth = $author$project$Risk$maxDepth(t);
+		var yInc = ((h - $author$project$Show$textY) - 10) / depth;
+		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + 10, yInc, t);
 	});
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
@@ -6654,7 +6726,7 @@ var $author$project$Show$render = F3(
 				[
 					A3($author$project$Show$showText, w, h, s)
 				]),
-			A3($author$project$Show$showTree, w, h, m));
+			A3($author$project$Show$showTree, w, h, t));
 	});
 var $author$project$Main$snd = function (_v0) {
 	var d = _v0.b;
