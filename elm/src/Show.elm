@@ -101,7 +101,7 @@ showTree w h t =
 {- Render Main -}        
                  
 render : Float -> Float -> Model -> List (Svg msg)
-render w h m = let t = Debug.log "\nTree" <| pAWinMemo m
+render w h (b, dict) = let t = pAWin b dict
                in [ showText w h t ] ++ showTree w h t
 
                    

@@ -21,30 +21,30 @@ snd : (a, b) -> b
 snd (_, d) = d
            
 initModel : Model            
-initModel = (5, 5)
+initModel = ((5, 5), genDict (10, 10))
 
 init : () -> (Model, Cmd Msg)
 init _ = (initModel, Cmd.none)
 
 view : Model -> Html Msg
-view model =
+view (b, dict) =
     div []
         [ button [ onClick DecrementA ] [ text "-" ]
-        , text ("A: " ++ String.fromInt (fst model))
+        , text ("A: " ++ String.fromInt (fst b))
         , button [ onClick IncrementA ] [ text "+" ]
         , button [ onClick DecrementD ] [ text "-" ]
-        , text ("B: " ++ String.fromInt (snd model))
+        , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
-        , svg [ viewBox 0 0 1000 800 ] (render 1000 800 model) 
+        , svg [ viewBox 0 0 1000 800 ] (render 1000 800 (b, dict))
         ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg (a, d) =
+update msg ((a, d), dict) =
     case msg of
-        IncrementA -> ((a+1, d), Cmd.none)
-        DecrementA -> if a > 2 then ((a-1, d), Cmd.none) else ((a, d), Cmd.none)
-        IncrementD -> ((a, d+1), Cmd.none)
-        DecrementD -> if d > 1 then ((a, d-1), Cmd.none) else ((a, d), Cmd.none)
+        IncrementA -> (((if a < 10 then a+1 else a, d), dict), Cmd.none)
+        DecrementA -> (((if a > 2 then a-1 else a, d), dict), Cmd.none)
+        IncrementD -> (((a, if d < 10 then d+1 else d), dict), Cmd.none)
+        DecrementD -> (((a, if d > 1 then d-1 else d), dict), Cmd.none)
 
 -- subscriptions : Model -> Sub Msg
 -- subscriptions model =

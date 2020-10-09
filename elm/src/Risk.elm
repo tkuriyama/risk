@@ -4,7 +4,7 @@ import Dict exposing (Dict)
 
 {- Model / Msg Types -}
 
-type alias Model = Battlefield
+type alias Model = (Battlefield, Dict Battlefield PTree)
 
 type Msg = IncrementA | DecrementA
          | IncrementD | DecrementD
@@ -105,35 +105,18 @@ nodeZero = Node (R.fromInt 0 1) []
 aLoses : Battlefield -> Scenario -> Bool
 aLoses (a, d) (_, (aLoss, dLoss)) =
     if d - dLoss <= 0 then False else a - aLoss <= 1
-          
-genTree : Battlefield -> Probability -> PTree
-genTree b p0 =
-    case b of
-        (_, 0) -> Node p0 []
-        (1, _) -> nodeZero
-        _ -> case Dict.get (maxTroops b) pDict of
-                 Nothing -> nodeZero
-                 Just pairs ->
-                     let update (p, ls) = (p, updateField b ls)
-                         branch (p, bNext) = genTree bNext p
-                     in List.filter (not << aLoses b) pairs
-                        |> List.map update
-                        |> List.map branch
-                        |> Node p0
-
-pAWin b = genTree b (R.fromInt 1 1)
 
 {- Memoized Probabilities -}
 
-showPair : Battlefield -> String
-showPair (a,d) = String.fromInt a ++ "," ++ String.fromInt d           
+updateHead : Probability -> PTree -> PTree
+updateHead p0 (Node p ts) = Node p0 ts
 
 genTreeMemo : Battlefield -> Probability -> Dict Battlefield PTree -> PTree
 genTreeMemo b p0 dict =
     case (b, Dict.get b dict) of
         ((_, 0), _) -> Node p0 []
         ((1, _), _) -> nodeZero
-        (_, (Just pt)) -> Debug.log ("\nFound in Dict " ++ showPair b) pt
+        (_, (Just pt)) -> updateHead p0 pt
         (_, _) ->
             case Dict.get (maxTroops b) pDict of
                 Nothing -> nodeZero
@@ -156,10 +139,11 @@ genDict (a, d) =
         defs = List.range 1 d
         pairs = crossMap atts defs (\att def -> (att, def))
         f b dict = let t = genTreeMemo b (R.fromInt 1 1) dict
-                   in Debug.log "\n Dict Updated " <| Dict.insert b t dict
-    in List.foldr f seedDict pairs
+                   in Dict.insert b t dict
+    in List.foldl f seedDict pairs
 
-pAWinMemo b = let dict = genDict b
-              in case Dict.get b dict of
-                     Just t -> t
-                     Nothing -> Node (R.fromInt 0 1) []
+pAWin b dict = case Dict.get b dict of
+                   Just t -> t
+                   Nothing -> Node (R.fromInt 0 1) []
+                             
+                                
