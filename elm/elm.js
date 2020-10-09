@@ -6730,10 +6730,7 @@ var $author$project$Show$aggLevel = F2(
 		var f = F2(
 			function (_v0, acc) {
 				var p = _v0.a;
-				return A2(
-					$author$project$Rational$add,
-					A2($author$project$Rational$mul, p0, p),
-					acc);
+				return A2($author$project$Rational$add, p, acc);
 			});
 		return A2(
 			$author$project$Rational$toFloatN,

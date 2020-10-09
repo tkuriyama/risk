@@ -28,12 +28,12 @@ showText w h t =
              , y (px <| textY)
              , class ["infoText"]
              ]
-             [ text s ] 
+             [ text s ]
 
 {- Show Tree -}
 
 aggLevel : R.Rational -> List PTree -> Float
-aggLevel p0 ts = let f (Node p _) acc = R.add (R.mul p0 p) acc
+aggLevel p0 ts = let f (Node p _) acc = R.add p acc -- (R.mul p0 p) acc
                  in List.foldr f (R.fromInt 0 1) ts |> R.toFloatN 5          
 
 showLeaf : R.Rational -> List PTree -> Float -> Float -> Float -> Float ->
