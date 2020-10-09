@@ -17,20 +17,23 @@ import TypedSvg.Core exposing (Svg, text)
 
 textY = 10
 
-showText : Float -> Float -> String -> Svg msg
-showText w h s =
-    let sWidth = String.length s * 9 |> toFloat                 
+showText : Float -> Float -> PTree -> Svg msg
+showText w h t =
+    let sWidth = String.length (s1 ++ s2) * 9 |> toFloat                 
+        r = agg t
+        s1 = R.toString r
+        s2 = R.toInt (R.mul r (R.fromInt 100 1)) |> \i -> (String.fromInt i) ++ "%"
     in text_ [ x (px <| w /2  - sWidth / 2)
              , y (px <| textY)
              , class ["infoText"]
              ]
-             [ text s ] 
+             [ text <| s1 ++ "(" ++ s2 ++ ")" ] 
 
 {- Show Tree -}
 
 aggLevel : R.Rational -> List PTree -> Float
-aggLevel p0 xs = let f (Node p _) acc = R.add (R.mul p0 p) acc
-                 in List.foldr f (R.fromInt 0 1) xs |> R.toFloatN 5          
+aggLevel p0 ts = let f (Node p _) acc = R.add (R.mul p0 p) acc
+                 in List.foldr f (R.fromInt 0 1) ts |> R.toFloatN 5          
 
 showLeaf : R.Rational -> List PTree -> Float -> Float -> Float -> Float ->
            List (Svg msg)
@@ -84,5 +87,4 @@ showTree w h t =
                  
 render : Float -> Float -> Model -> List (Svg msg)
 render w h m = let t = pAWin m
-                   s = agg t |> R.toString
-               in [ showText w h s ] ++ showTree w h t
+               in [ showText w h t ] ++ showTree w h t

@@ -5239,12 +5239,33 @@ var $elm$html$Html$Events$onClick = function (msg) {
 };
 var $author$project$Rational$Neg = 1;
 var $author$project$Rational$Pos = 0;
+var $cmditch$elm_bigint$BigInt$Pos = function (a) {
+	return {$: 0, a: a};
+};
+var $cmditch$elm_bigint$BigInt$Zer = {$: 2};
+var $cmditch$elm_bigint$BigInt$abs = function (bigInt) {
+	switch (bigInt.$) {
+		case 2:
+			return $cmditch$elm_bigint$BigInt$Zer;
+		case 1:
+			var mag = bigInt.a;
+			return $cmditch$elm_bigint$BigInt$Pos(mag);
+		default:
+			var i = bigInt;
+			return i;
+	}
+};
 var $cmditch$elm_bigint$BigInt$BigIntNotNormalised = F2(
 	function (a, b) {
 		return {$: 0, a: a, b: b};
 	});
 var $cmditch$elm_bigint$BigInt$MagnitudeNotNormalised = $elm$core$Basics$identity;
-var $cmditch$elm_bigint$BigInt$Positive = 0;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
 var $cmditch$elm_bigint$BigInt$Magnitude = $elm$core$Basics$identity;
 var $elm_community$list_extra$List$Extra$last = function (items) {
 	last:
@@ -5276,10 +5297,6 @@ var $cmditch$elm_bigint$BigInt$isNegativeMagnitude = function (digits) {
 var $cmditch$elm_bigint$BigInt$Neg = function (a) {
 	return {$: 1, a: a};
 };
-var $cmditch$elm_bigint$BigInt$Pos = function (a) {
-	return {$: 0, a: a};
-};
-var $cmditch$elm_bigint$BigInt$Zer = {$: 2};
 var $elm$core$List$isEmpty = function (xs) {
 	if (!xs.b) {
 		return true;
@@ -5319,9 +5336,6 @@ var $elm_community$list_extra$List$Extra$dropWhileRight = function (p) {
 var $cmditch$elm_bigint$BigInt$dropZeroes = $elm_community$list_extra$List$Extra$dropWhileRight(
 	$elm$core$Basics$eq(0));
 var $cmditch$elm_bigint$Constants$maxDigitMagnitude = 7;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
 var $elm$core$Basics$pow = _Basics_pow;
 var $cmditch$elm_bigint$Constants$maxDigitValue = (-1) + A2($elm$core$Basics$pow, 10, $cmditch$elm_bigint$Constants$maxDigitMagnitude);
 var $cmditch$elm_bigint$BigInt$baseDigit = $cmditch$elm_bigint$Constants$maxDigitValue + 1;
@@ -5375,6 +5389,7 @@ var $cmditch$elm_bigint$BigInt$normaliseMagnitude = function (_v0) {
 };
 var $cmditch$elm_bigint$BigInt$reverseMagnitude = $elm$core$List$map($elm$core$Basics$negate);
 var $cmditch$elm_bigint$BigInt$Negative = 1;
+var $cmditch$elm_bigint$BigInt$Positive = 0;
 var $cmditch$elm_bigint$BigInt$Zero = 2;
 var $cmditch$elm_bigint$BigInt$signNegate = function (sign_) {
 	switch (sign_) {
@@ -5403,6 +5418,280 @@ var $cmditch$elm_bigint$BigInt$normalise = function (_v0) {
 		} else {
 			return A2($cmditch$elm_bigint$BigInt$mkBigInt, s, normalisedMag);
 		}
+	}
+};
+var $elm$core$Basics$compare = _Utils_compare;
+var $cmditch$elm_bigint$BigInt$signFromInt = function (x) {
+	var _v0 = A2($elm$core$Basics$compare, x, 0);
+	switch (_v0) {
+		case 0:
+			return 1;
+		case 2:
+			return 0;
+		default:
+			return 2;
+	}
+};
+var $cmditch$elm_bigint$BigInt$fromInt = function (x) {
+	return $cmditch$elm_bigint$BigInt$normalise(
+		A2(
+			$cmditch$elm_bigint$BigInt$BigIntNotNormalised,
+			$cmditch$elm_bigint$BigInt$signFromInt(x),
+			_List_fromArray(
+				[
+					$elm$core$Basics$abs(x)
+				])));
+};
+var $elm$core$Basics$ge = _Utils_ge;
+var $author$project$Rational$fromInt = F2(
+	function (n, d) {
+		var s = (((n >= 0) && (d >= 0)) || ((n < 0) && (d < 0))) ? 0 : 1;
+		return {
+			b: $cmditch$elm_bigint$BigInt$abs(
+				$cmditch$elm_bigint$BigInt$fromInt(d)),
+			a: $cmditch$elm_bigint$BigInt$abs(
+				$cmditch$elm_bigint$BigInt$fromInt(n)),
+			d: s
+		};
+	});
+var $author$project$Risk$Node = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $author$project$Risk$aLoses = F2(
+	function (_v0, _v1) {
+		var a = _v0.a;
+		var d = _v0.b;
+		var _v2 = _v1.b;
+		var aLoss = _v2.a;
+		var dLoss = _v2.b;
+		return ((d - dLoss) <= 0) ? false : ((a - aLoss) <= 1);
+	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$Dict$get = F2(
+	function (targetKey, dict) {
+		get:
+		while (true) {
+			if (dict.$ === -2) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
+				switch (_v1) {
+					case 0:
+						var $temp$targetKey = targetKey,
+							$temp$dict = left;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+					case 1:
+						return $elm$core$Maybe$Just(value);
+					default:
+						var $temp$targetKey = targetKey,
+							$temp$dict = right;
+						targetKey = $temp$targetKey;
+						dict = $temp$dict;
+						continue get;
+				}
+			}
+		}
+	});
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
+var $author$project$Risk$maxTroops = function (_v0) {
+	var a = _v0.a;
+	var d = _v0.b;
+	return _Utils_Tuple2(
+		A2($elm$core$Basics$min, 3, a - 1),
+		A2($elm$core$Basics$min, 2, d));
+};
+var $author$project$Risk$nodeZero = A2(
+	$author$project$Risk$Node,
+	A2($author$project$Rational$fromInt, 0, 1),
+	_List_Nil);
+var $elm$core$Basics$not = _Basics_not;
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
+};
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
+	});
+var $author$project$Risk$crossMap = F3(
+	function (xs, ys, f) {
+		return A2(
+			$elm$core$List$concatMap,
+			function (x) {
+				return A2(
+					$elm$core$List$map,
+					function (y) {
+						return A2(f, x, y);
+					},
+					ys);
+			},
+			xs);
+	});
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
+var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $elm$core$Dict$Black = 1;
+var $elm$core$Dict$RBNode_elm_builtin = F5(
+	function (a, b, c, d, e) {
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$core$Dict$Red = 0;
+var $elm$core$Dict$balance = F5(
+	function (color, key, value, left, right) {
+		if ((right.$ === -1) && (!right.a)) {
+			var _v1 = right.a;
+			var rK = right.b;
+			var rV = right.c;
+			var rLeft = right.d;
+			var rRight = right.e;
+			if ((left.$ === -1) && (!left.a)) {
+				var _v3 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var lLeft = left.d;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					key,
+					value,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
+			} else {
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					color,
+					rK,
+					rV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
+					rRight);
+			}
+		} else {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
+				var _v5 = left.a;
+				var lK = left.b;
+				var lV = left.c;
+				var _v6 = left.d;
+				var _v7 = _v6.a;
+				var llK = _v6.b;
+				var llV = _v6.c;
+				var llLeft = _v6.d;
+				var llRight = _v6.e;
+				var lRight = left.e;
+				return A5(
+					$elm$core$Dict$RBNode_elm_builtin,
+					0,
+					lK,
+					lV,
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
+			} else {
+				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
+			}
+		}
+	});
+var $elm$core$Dict$insertHelp = F3(
+	function (key, value, dict) {
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		} else {
+			var nColor = dict.a;
+			var nKey = dict.b;
+			var nValue = dict.c;
+			var nLeft = dict.d;
+			var nRight = dict.e;
+			var _v1 = A2($elm$core$Basics$compare, key, nKey);
+			switch (_v1) {
+				case 0:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						A3($elm$core$Dict$insertHelp, key, value, nLeft),
+						nRight);
+				case 1:
+					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
+				default:
+					return A5(
+						$elm$core$Dict$balance,
+						nColor,
+						nKey,
+						nValue,
+						nLeft,
+						A3($elm$core$Dict$insertHelp, key, value, nRight));
+			}
+		}
+	});
+var $elm$core$Dict$insert = F3(
+	function (key, value, dict) {
+		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
+		if ((_v0.$ === -1) && (!_v0.a)) {
+			var _v1 = _v0.a;
+			var k = _v0.b;
+			var v = _v0.c;
+			var l = _v0.d;
+			var r = _v0.e;
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
+		} else {
+			var x = _v0;
+			return x;
+		}
+	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $cmditch$elm_bigint$BigInt$magnitude = function (bigInt) {
+	switch (bigInt.$) {
+		case 2:
+			return _List_Nil;
+		case 0:
+			var mag = bigInt.a;
+			return mag;
+		default:
+			var mag = bigInt.a;
+			return mag;
 	}
 };
 var $cmditch$elm_bigint$BigInt$MagnitudePair = $elm$core$Basics$identity;
@@ -5484,31 +5773,77 @@ var $cmditch$elm_bigint$BigInt$add = F2(
 		return $cmditch$elm_bigint$BigInt$normalise(
 			A2($cmditch$elm_bigint$BigInt$BigIntNotNormalised, 0, added));
 	});
-var $author$project$Rational$pos = function (r) {
-	return !r.d;
-};
-var $author$project$Rational$addEqSign = F2(
-	function (a, b) {
-		var s = $author$project$Rational$pos(a) ? 0 : 1;
-		return {
-			b: a.b,
-			a: A2($cmditch$elm_bigint$BigInt$add, a.a, b.a),
-			d: s
-		};
+var $cmditch$elm_bigint$BigInt$mulSingleDigit = F2(
+	function (_v0, d) {
+		var xs = _v0;
+		return $cmditch$elm_bigint$BigInt$normaliseMagnitude(
+			A2(
+				$elm$core$List$map,
+				$elm$core$Basics$mul(d),
+				xs));
 	});
-var $cmditch$elm_bigint$BigInt$abs = function (bigInt) {
+var $cmditch$elm_bigint$BigInt$mulMagnitudes = F2(
+	function (_v0, _v1) {
+		var mag1 = _v0;
+		var mag2 = _v1;
+		if (!mag1.b) {
+			return _List_Nil;
+		} else {
+			if (!mag1.b.b) {
+				var m = mag1.a;
+				return A2($cmditch$elm_bigint$BigInt$mulSingleDigit, mag2, m);
+			} else {
+				var m = mag1.a;
+				var mx = mag1.b;
+				var accum = A2($cmditch$elm_bigint$BigInt$mulSingleDigit, mag2, m);
+				var _v3 = A2($cmditch$elm_bigint$BigInt$mulMagnitudes, mx, mag2);
+				var rest = _v3;
+				var bigInt = A2(
+					$cmditch$elm_bigint$BigInt$add,
+					A2($cmditch$elm_bigint$BigInt$mkBigInt, 0, accum),
+					A2(
+						$cmditch$elm_bigint$BigInt$mkBigInt,
+						0,
+						A2($elm$core$List$cons, 0, rest)));
+				return $cmditch$elm_bigint$BigInt$magnitude(bigInt);
+			}
+		}
+	});
+var $cmditch$elm_bigint$BigInt$sign = function (bigInt) {
 	switch (bigInt.$) {
 		case 2:
-			return $cmditch$elm_bigint$BigInt$Zer;
-		case 1:
-			var mag = bigInt.a;
-			return $cmditch$elm_bigint$BigInt$Pos(mag);
+			return 2;
+		case 0:
+			return 0;
 		default:
-			var i = bigInt;
-			return i;
+			return 1;
 	}
 };
-var $elm$core$Basics$compare = _Utils_compare;
+var $cmditch$elm_bigint$BigInt$signProduct = F2(
+	function (x, y) {
+		return ((x === 2) || (y === 2)) ? 2 : (_Utils_eq(x, y) ? 0 : 1);
+	});
+var $cmditch$elm_bigint$BigInt$mul = F2(
+	function (int1, int2) {
+		return A2(
+			$cmditch$elm_bigint$BigInt$mkBigInt,
+			A2(
+				$cmditch$elm_bigint$BigInt$signProduct,
+				$cmditch$elm_bigint$BigInt$sign(int1),
+				$cmditch$elm_bigint$BigInt$sign(int2)),
+			A2(
+				$cmditch$elm_bigint$BigInt$mulMagnitudes,
+				$cmditch$elm_bigint$BigInt$magnitude(int1),
+				$cmditch$elm_bigint$BigInt$magnitude(int2)));
+	});
+var $author$project$Rational$eqSign = F2(
+	function (a, b) {
+		return ((!a.d) && (!b.d)) || ((a.d === 1) && (b.d === 1));
+	});
+var $author$project$Rational$mulSign = F2(
+	function (a, b) {
+		return A2($author$project$Rational$eqSign, a, b) ? 0 : 1;
+	});
 var $cmditch$elm_bigint$BigInt$compareMagnitude = F4(
 	function (x, y, xs, ys) {
 		compareMagnitude:
@@ -5601,14 +5936,13 @@ var $cmditch$elm_bigint$BigInt$compare = F2(
 				}
 		}
 	});
-var $cmditch$elm_bigint$BigInt$lt = F2(
+var $cmditch$elm_bigint$BigInt$gt = F2(
 	function (x, y) {
-		return !A2($cmditch$elm_bigint$BigInt$compare, x, y);
+		return A2($cmditch$elm_bigint$BigInt$compare, x, y) === 2;
 	});
-var $elm$core$Basics$not = _Basics_not;
-var $cmditch$elm_bigint$BigInt$gte = F2(
+var $cmditch$elm_bigint$BigInt$lte = F2(
 	function (x, y) {
-		return !A2($cmditch$elm_bigint$BigInt$lt, x, y);
+		return !A2($cmditch$elm_bigint$BigInt$gt, x, y);
 	});
 var $cmditch$elm_bigint$BigInt$negate = function (bigInt) {
 	switch (bigInt.$) {
@@ -5628,130 +5962,6 @@ var $cmditch$elm_bigint$BigInt$sub = F2(
 			$cmditch$elm_bigint$BigInt$add,
 			a,
 			$cmditch$elm_bigint$BigInt$negate(b));
-	});
-var $author$project$Rational$addNotEqSign = F2(
-	function (a, b) {
-		var _v0 = $author$project$Rational$pos(a) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-		var x = _v0.a;
-		var y = _v0.b;
-		var s = A2($cmditch$elm_bigint$BigInt$gte, x.a, y.a) ? 0 : 1;
-		return {
-			b: x.b,
-			a: $cmditch$elm_bigint$BigInt$abs(
-				A2($cmditch$elm_bigint$BigInt$sub, x.a, y.a)),
-			d: s
-		};
-	});
-var $author$project$Rational$eqSign = F2(
-	function (a, b) {
-		return ((!a.d) && (!b.d)) || ((a.d === 1) && (b.d === 1));
-	});
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var $cmditch$elm_bigint$BigInt$signFromInt = function (x) {
-	var _v0 = A2($elm$core$Basics$compare, x, 0);
-	switch (_v0) {
-		case 0:
-			return 1;
-		case 2:
-			return 0;
-		default:
-			return 2;
-	}
-};
-var $cmditch$elm_bigint$BigInt$fromInt = function (x) {
-	return $cmditch$elm_bigint$BigInt$normalise(
-		A2(
-			$cmditch$elm_bigint$BigInt$BigIntNotNormalised,
-			$cmditch$elm_bigint$BigInt$signFromInt(x),
-			_List_fromArray(
-				[
-					$elm$core$Basics$abs(x)
-				])));
-};
-var $cmditch$elm_bigint$BigInt$gt = F2(
-	function (x, y) {
-		return A2($cmditch$elm_bigint$BigInt$compare, x, y) === 2;
-	});
-var $cmditch$elm_bigint$BigInt$lte = F2(
-	function (x, y) {
-		return !A2($cmditch$elm_bigint$BigInt$gt, x, y);
-	});
-var $cmditch$elm_bigint$BigInt$magnitude = function (bigInt) {
-	switch (bigInt.$) {
-		case 2:
-			return _List_Nil;
-		case 0:
-			var mag = bigInt.a;
-			return mag;
-		default:
-			var mag = bigInt.a;
-			return mag;
-	}
-};
-var $cmditch$elm_bigint$BigInt$mulSingleDigit = F2(
-	function (_v0, d) {
-		var xs = _v0;
-		return $cmditch$elm_bigint$BigInt$normaliseMagnitude(
-			A2(
-				$elm$core$List$map,
-				$elm$core$Basics$mul(d),
-				xs));
-	});
-var $cmditch$elm_bigint$BigInt$mulMagnitudes = F2(
-	function (_v0, _v1) {
-		var mag1 = _v0;
-		var mag2 = _v1;
-		if (!mag1.b) {
-			return _List_Nil;
-		} else {
-			if (!mag1.b.b) {
-				var m = mag1.a;
-				return A2($cmditch$elm_bigint$BigInt$mulSingleDigit, mag2, m);
-			} else {
-				var m = mag1.a;
-				var mx = mag1.b;
-				var accum = A2($cmditch$elm_bigint$BigInt$mulSingleDigit, mag2, m);
-				var _v3 = A2($cmditch$elm_bigint$BigInt$mulMagnitudes, mx, mag2);
-				var rest = _v3;
-				var bigInt = A2(
-					$cmditch$elm_bigint$BigInt$add,
-					A2($cmditch$elm_bigint$BigInt$mkBigInt, 0, accum),
-					A2(
-						$cmditch$elm_bigint$BigInt$mkBigInt,
-						0,
-						A2($elm$core$List$cons, 0, rest)));
-				return $cmditch$elm_bigint$BigInt$magnitude(bigInt);
-			}
-		}
-	});
-var $cmditch$elm_bigint$BigInt$sign = function (bigInt) {
-	switch (bigInt.$) {
-		case 2:
-			return 2;
-		case 0:
-			return 0;
-		default:
-			return 1;
-	}
-};
-var $cmditch$elm_bigint$BigInt$signProduct = F2(
-	function (x, y) {
-		return ((x === 2) || (y === 2)) ? 2 : (_Utils_eq(x, y) ? 0 : 1);
-	});
-var $cmditch$elm_bigint$BigInt$mul = F2(
-	function (int1, int2) {
-		return A2(
-			$cmditch$elm_bigint$BigInt$mkBigInt,
-			A2(
-				$cmditch$elm_bigint$BigInt$signProduct,
-				$cmditch$elm_bigint$BigInt$sign(int1),
-				$cmditch$elm_bigint$BigInt$sign(int2)),
-			A2(
-				$cmditch$elm_bigint$BigInt$mulMagnitudes,
-				$cmditch$elm_bigint$BigInt$magnitude(int1),
-				$cmditch$elm_bigint$BigInt$magnitude(int2)));
 	});
 var $cmditch$elm_bigint$BigInt$zero = $cmditch$elm_bigint$BigInt$fromInt(0);
 var $cmditch$elm_bigint$BigInt$divmodDigit_ = F4(
@@ -5941,28 +6151,6 @@ var $author$project$Rational$gcd = F2(
 			}
 		}
 	});
-var $author$project$Rational$lcm = F2(
-	function (a, b) {
-		return A2(
-			$cmditch$elm_bigint$BigInt$div,
-			A2($cmditch$elm_bigint$BigInt$mul, a, b),
-			A2($author$project$Rational$gcd, a, b));
-	});
-var $author$project$Rational$normalize = F2(
-	function (a, b) {
-		var d = A2($author$project$Rational$lcm, a.b, b.b);
-		var n1 = A2(
-			$cmditch$elm_bigint$BigInt$mul,
-			a.a,
-			A2($cmditch$elm_bigint$BigInt$div, d, a.b));
-		var n2 = A2(
-			$cmditch$elm_bigint$BigInt$mul,
-			b.a,
-			A2($cmditch$elm_bigint$BigInt$div, d, b.b));
-		return _Utils_Tuple2(
-			{b: d, a: n1, d: a.d},
-			{b: d, a: n2, d: b.d});
-	});
 var $author$project$Rational$reduce = function (r) {
 	var d = A2($author$project$Rational$gcd, r.a, r.b);
 	return {
@@ -5971,31 +6159,6 @@ var $author$project$Rational$reduce = function (r) {
 		d: r.d
 	};
 };
-var $author$project$Rational$add = F2(
-	function (a, b) {
-		var f = A2($author$project$Rational$eqSign, a, b) ? $author$project$Rational$addEqSign : $author$project$Rational$addNotEqSign;
-		var _v0 = A2($author$project$Rational$normalize, a, b);
-		var an = _v0.a;
-		var bn = _v0.b;
-		return $author$project$Rational$reduce(
-			A2(f, an, bn));
-	});
-var $elm$core$Basics$ge = _Utils_ge;
-var $author$project$Rational$fromInt = F2(
-	function (n, d) {
-		var s = (((n >= 0) && (d >= 0)) || ((n < 0) && (d < 0))) ? 0 : 1;
-		return {
-			b: $cmditch$elm_bigint$BigInt$abs(
-				$cmditch$elm_bigint$BigInt$fromInt(d)),
-			a: $cmditch$elm_bigint$BigInt$abs(
-				$cmditch$elm_bigint$BigInt$fromInt(n)),
-			d: s
-		};
-	});
-var $author$project$Rational$mulSign = F2(
-	function (a, b) {
-		return A2($author$project$Rational$eqSign, a, b) ? 0 : 1;
-	});
 var $author$project$Rational$mul = F2(
 	function (a, b) {
 		var s = A2($author$project$Rational$mulSign, a, b);
@@ -6004,257 +6167,6 @@ var $author$project$Rational$mul = F2(
 		return $author$project$Rational$reduce(
 			{b: d, a: n, d: s});
 	});
-var $author$project$Risk$agg = function (_v0) {
-	var p = _v0.a;
-	var ts = _v0.b;
-	if (!ts.b) {
-		return p;
-	} else {
-		var xs = ts;
-		var f = F2(
-			function (t, acc) {
-				return A2(
-					$author$project$Rational$add,
-					acc,
-					A2(
-						$author$project$Rational$mul,
-						p,
-						$author$project$Risk$agg(t)));
-			});
-		return A3(
-			$elm$core$List$foldr,
-			f,
-			A2($author$project$Rational$fromInt, 0, 1),
-			xs);
-	}
-};
-var $author$project$Risk$Node = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var $author$project$Risk$aLoses = F2(
-	function (_v0, _v1) {
-		var a = _v0.a;
-		var d = _v0.b;
-		var _v2 = _v1.b;
-		var aLoss = _v2.a;
-		var dLoss = _v2.b;
-		return ((d - dLoss) <= 0) ? false : ((a - aLoss) <= 1);
-	});
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var $elm$core$Dict$get = F2(
-	function (targetKey, dict) {
-		get:
-		while (true) {
-			if (dict.$ === -2) {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
-				switch (_v1) {
-					case 0:
-						var $temp$targetKey = targetKey,
-							$temp$dict = left;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-					case 1:
-						return $elm$core$Maybe$Just(value);
-					default:
-						var $temp$targetKey = targetKey,
-							$temp$dict = right;
-						targetKey = $temp$targetKey;
-						dict = $temp$dict;
-						continue get;
-				}
-			}
-		}
-	});
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
-var $author$project$Risk$maxTroops = function (_v0) {
-	var a = _v0.a;
-	var d = _v0.b;
-	return _Utils_Tuple2(
-		A2($elm$core$Basics$min, 3, a - 1),
-		A2($elm$core$Basics$min, 2, d));
-};
-var $author$project$Risk$nodeZero = A2(
-	$author$project$Risk$Node,
-	A2($author$project$Rational$fromInt, 0, 1),
-	_List_Nil);
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $elm$core$List$concat = function (lists) {
-	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
-};
-var $elm$core$List$concatMap = F2(
-	function (f, list) {
-		return $elm$core$List$concat(
-			A2($elm$core$List$map, f, list));
-	});
-var $author$project$Risk$crossMap = F3(
-	function (xs, ys, f) {
-		return A2(
-			$elm$core$List$concatMap,
-			function (x) {
-				return A2(
-					$elm$core$List$map,
-					function (y) {
-						return A2(f, x, y);
-					},
-					ys);
-			},
-			xs);
-	});
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
-var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
-var $elm$core$Dict$Black = 1;
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: -1, a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$Red = 0;
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === -1) && (!right.a)) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === -1) && (!left.a)) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					0,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === -2) {
-			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1) {
-				case 0:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 1:
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === -1) && (!_v0.a)) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
-};
 var $author$project$Rational$div = F2(
 	function (a, b) {
 		return A2(
@@ -6480,6 +6392,94 @@ var $author$project$Risk$pAWin = function (b) {
 		b,
 		A2($author$project$Rational$fromInt, 1, 1));
 };
+var $author$project$Rational$pos = function (r) {
+	return !r.d;
+};
+var $author$project$Rational$addEqSign = F2(
+	function (a, b) {
+		var s = $author$project$Rational$pos(a) ? 0 : 1;
+		return {
+			b: a.b,
+			a: A2($cmditch$elm_bigint$BigInt$add, a.a, b.a),
+			d: s
+		};
+	});
+var $cmditch$elm_bigint$BigInt$lt = F2(
+	function (x, y) {
+		return !A2($cmditch$elm_bigint$BigInt$compare, x, y);
+	});
+var $cmditch$elm_bigint$BigInt$gte = F2(
+	function (x, y) {
+		return !A2($cmditch$elm_bigint$BigInt$lt, x, y);
+	});
+var $author$project$Rational$addNotEqSign = F2(
+	function (a, b) {
+		var _v0 = $author$project$Rational$pos(a) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+		var x = _v0.a;
+		var y = _v0.b;
+		var s = A2($cmditch$elm_bigint$BigInt$gte, x.a, y.a) ? 0 : 1;
+		return {
+			b: x.b,
+			a: $cmditch$elm_bigint$BigInt$abs(
+				A2($cmditch$elm_bigint$BigInt$sub, x.a, y.a)),
+			d: s
+		};
+	});
+var $author$project$Rational$lcm = F2(
+	function (a, b) {
+		return A2(
+			$cmditch$elm_bigint$BigInt$div,
+			A2($cmditch$elm_bigint$BigInt$mul, a, b),
+			A2($author$project$Rational$gcd, a, b));
+	});
+var $author$project$Rational$normalize = F2(
+	function (a, b) {
+		var d = A2($author$project$Rational$lcm, a.b, b.b);
+		var n1 = A2(
+			$cmditch$elm_bigint$BigInt$mul,
+			a.a,
+			A2($cmditch$elm_bigint$BigInt$div, d, a.b));
+		var n2 = A2(
+			$cmditch$elm_bigint$BigInt$mul,
+			b.a,
+			A2($cmditch$elm_bigint$BigInt$div, d, b.b));
+		return _Utils_Tuple2(
+			{b: d, a: n1, d: a.d},
+			{b: d, a: n2, d: b.d});
+	});
+var $author$project$Rational$add = F2(
+	function (a, b) {
+		var f = A2($author$project$Rational$eqSign, a, b) ? $author$project$Rational$addEqSign : $author$project$Rational$addNotEqSign;
+		var _v0 = A2($author$project$Rational$normalize, a, b);
+		var an = _v0.a;
+		var bn = _v0.b;
+		return $author$project$Rational$reduce(
+			A2(f, an, bn));
+	});
+var $author$project$Risk$agg = function (_v0) {
+	var p = _v0.a;
+	var ts = _v0.b;
+	if (!ts.b) {
+		return p;
+	} else {
+		var xs = ts;
+		var f = F2(
+			function (t, acc) {
+				return A2(
+					$author$project$Rational$add,
+					acc,
+					A2(
+						$author$project$Rational$mul,
+						p,
+						$author$project$Risk$agg(t)));
+			});
+		return A3(
+			$elm$core$List$foldr,
+			f,
+			A2($author$project$Rational$fromInt, 0, 1),
+			xs);
+	}
+};
 var $elm$virtual_dom$VirtualDom$attribute = F2(
 	function (key, value) {
 		return A2(
@@ -6507,117 +6507,13 @@ var $elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
 };
 var $elm_community$typed_svg$TypedSvg$Core$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
 var $elm_community$typed_svg$TypedSvg$text_ = $elm_community$typed_svg$TypedSvg$Core$node('text');
-var $elm$core$String$fromFloat = _String_fromNumber;
-var $elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
-	switch (length.$) {
-		case 0:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'cm';
-		case 1:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'em';
-		case 2:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'ex';
-		case 3:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'in';
-		case 4:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'mm';
-		case 5:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x);
-		case 6:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'pc';
-		case 7:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + '%';
-		case 8:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'pt';
-		default:
-			var x = length.a;
-			return $elm$core$String$fromFloat(x) + 'px';
-	}
-};
-var $elm_community$typed_svg$TypedSvg$Attributes$x = function (length) {
-	return A2(
-		$elm_community$typed_svg$TypedSvg$Core$attribute,
-		'x',
-		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var $elm_community$typed_svg$TypedSvg$Attributes$y = function (length) {
-	return A2(
-		$elm_community$typed_svg$TypedSvg$Core$attribute,
-		'y',
-		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
-var $author$project$Show$showText = F3(
-	function (w, h, s) {
-		var sWidth = $elm$core$String$length(s) * 9;
-		return A2(
-			$elm_community$typed_svg$TypedSvg$text_,
-			_List_fromArray(
-				[
-					$elm_community$typed_svg$TypedSvg$Attributes$x(
-					$elm_community$typed_svg$TypedSvg$Types$px((w / 2) - (sWidth / 2))),
-					$elm_community$typed_svg$TypedSvg$Attributes$y(
-					$elm_community$typed_svg$TypedSvg$Types$px($author$project$Show$textY)),
-					$elm_community$typed_svg$TypedSvg$Attributes$class(
-					_List_fromArray(
-						['infoText']))
-				]),
-			_List_fromArray(
-				[
-					$elm_community$typed_svg$TypedSvg$Core$text(s)
-				]));
-	});
-var $elm$core$List$maximum = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return $elm$core$Maybe$Just(
-			A3($elm$core$List$foldl, $elm$core$Basics$max, x, xs));
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $author$project$Risk$intMax = function (xs) {
-	var _v0 = $elm$core$List$maximum(xs);
-	if (!_v0.$) {
-		var x = _v0.a;
-		return x;
-	} else {
-		return 0;
-	}
-};
-var $author$project$Risk$maxDepth = function (_v0) {
-	var p = _v0.a;
-	var ts = _v0.b;
-	if (!ts.b) {
-		return 1;
-	} else {
-		var xs = ts;
-		return 1 + $author$project$Risk$intMax(
-			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
-	}
-};
-var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
-	return {$: 0, a: a};
-};
-var $elm_community$typed_svg$TypedSvg$Types$Paint = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$core$String$toFloat = _String_toFloat;
-var $author$project$Rational$strToFloat = function (s) {
-	var x = $elm$core$String$toFloat(s);
+var $author$project$Rational$strToInt = function (s) {
+	var x = $elm$core$String$toInt(s);
 	if (x.$ === 1) {
-		return 0.0;
+		return 0;
 	} else {
-		var f = x.a;
-		return f;
+		var n = x.a;
+		return n;
 	}
 };
 var $elm$core$String$concat = function (strings) {
@@ -6681,6 +6577,138 @@ var $cmditch$elm_bigint$BigInt$toString = function (bigInt) {
 			return '-' + $cmditch$elm_bigint$BigInt$revMagnitudeToString(mag);
 	}
 };
+var $author$project$Rational$toInt = function (r) {
+	return $author$project$Rational$strToInt(
+		$cmditch$elm_bigint$BigInt$toString(
+			A2($cmditch$elm_bigint$BigInt$div, r.a, r.b)));
+};
+var $author$project$Rational$toString = function (r) {
+	return $cmditch$elm_bigint$BigInt$toString(r.a) + (' % ' + $cmditch$elm_bigint$BigInt$toString(r.b));
+};
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
+	switch (length.$) {
+		case 0:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'cm';
+		case 1:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'em';
+		case 2:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'ex';
+		case 3:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'in';
+		case 4:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'mm';
+		case 5:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x);
+		case 6:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'pc';
+		case 7:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + '%';
+		case 8:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'pt';
+		default:
+			var x = length.a;
+			return $elm$core$String$fromFloat(x) + 'px';
+	}
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$x = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'x',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$y = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'y',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $author$project$Show$showText = F3(
+	function (w, h, t) {
+		var r = $author$project$Risk$agg(t);
+		var s1 = $author$project$Rational$toString(r);
+		var s2 = function (i) {
+			return $elm$core$String$fromInt(i) + '%';
+		}(
+			$author$project$Rational$toInt(
+				A2(
+					$author$project$Rational$mul,
+					r,
+					A2($author$project$Rational$fromInt, 100, 1))));
+		var sWidth = $elm$core$String$length(
+			_Utils_ap(s1, s2)) * 9;
+		return A2(
+			$elm_community$typed_svg$TypedSvg$text_,
+			_List_fromArray(
+				[
+					$elm_community$typed_svg$TypedSvg$Attributes$x(
+					$elm_community$typed_svg$TypedSvg$Types$px((w / 2) - (sWidth / 2))),
+					$elm_community$typed_svg$TypedSvg$Attributes$y(
+					$elm_community$typed_svg$TypedSvg$Types$px($author$project$Show$textY)),
+					$elm_community$typed_svg$TypedSvg$Attributes$class(
+					_List_fromArray(
+						['infoText']))
+				]),
+			_List_fromArray(
+				[
+					$elm_community$typed_svg$TypedSvg$Core$text(s1 + ('(' + (s2 + ')')))
+				]));
+	});
+var $elm$core$List$maximum = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(
+			A3($elm$core$List$foldl, $elm$core$Basics$max, x, xs));
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Risk$intMax = function (xs) {
+	var _v0 = $elm$core$List$maximum(xs);
+	if (!_v0.$) {
+		var x = _v0.a;
+		return x;
+	} else {
+		return 0;
+	}
+};
+var $author$project$Risk$maxDepth = function (_v0) {
+	var p = _v0.a;
+	var ts = _v0.b;
+	if (!ts.b) {
+		return 1;
+	} else {
+		var xs = ts;
+		return 1 + $author$project$Risk$intMax(
+			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
+	}
+};
+var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
+	return {$: 0, a: a};
+};
+var $elm_community$typed_svg$TypedSvg$Types$Paint = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$String$toFloat = _String_toFloat;
+var $author$project$Rational$strToFloat = function (s) {
+	var x = $elm$core$String$toFloat(s);
+	if (x.$ === 1) {
+		return 0.0;
+	} else {
+		var f = x.a;
+		return f;
+	}
+};
 var $author$project$Rational$toFloatN = F2(
 	function (n, r) {
 		var dp = A2($elm$core$Basics$pow, 10, n);
@@ -6698,7 +6726,7 @@ var $author$project$Rational$toFloatN = F2(
 						r.b))));
 	});
 var $author$project$Show$aggLevel = F2(
-	function (p0, xs) {
+	function (p0, ts) {
 		var f = F2(
 			function (_v0, acc) {
 				var p = _v0.a;
@@ -6714,7 +6742,7 @@ var $author$project$Show$aggLevel = F2(
 				$elm$core$List$foldr,
 				f,
 				A2($author$project$Rational$fromInt, 0, 1),
-				xs));
+				ts));
 	});
 var $elm$core$Basics$round = _Basics_round;
 var $avh4$elm_color$Color$toCssString = function (_v0) {
@@ -6895,18 +6923,13 @@ var $author$project$Show$showTree = F3(
 		var yInc = A2($elm$core$Basics$min, 100, ((h - $author$project$Show$textY) - yStart) / depth);
 		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + yStart, yInc, t);
 	});
-var $author$project$Rational$toString = function (r) {
-	return $cmditch$elm_bigint$BigInt$toString(r.a) + (' % ' + $cmditch$elm_bigint$BigInt$toString(r.b));
-};
 var $author$project$Show$render = F3(
 	function (w, h, m) {
 		var t = $author$project$Risk$pAWin(m);
-		var s = $author$project$Rational$toString(
-			$author$project$Risk$agg(t));
 		return _Utils_ap(
 			_List_fromArray(
 				[
-					A3($author$project$Show$showText, w, h, s)
+					A3($author$project$Show$showText, w, h, t)
 				]),
 			A3($author$project$Show$showTree, w, h, t));
 	});
