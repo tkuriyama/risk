@@ -6494,6 +6494,7 @@ var $elm_community$typed_svg$TypedSvg$Attributes$class = function (names) {
 		'class',
 		A2($elm$core$String$join, ' ', names));
 };
+var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm_community$typed_svg$TypedSvg$Types$Px = function (a) {
 	return {$: 9, a: a};
 };
@@ -6507,13 +6508,14 @@ var $elm$virtual_dom$VirtualDom$nodeNS = function (tag) {
 };
 var $elm_community$typed_svg$TypedSvg$Core$node = $elm$virtual_dom$VirtualDom$nodeNS('http://www.w3.org/2000/svg');
 var $elm_community$typed_svg$TypedSvg$text_ = $elm_community$typed_svg$TypedSvg$Core$node('text');
-var $author$project$Rational$strToInt = function (s) {
-	var x = $elm$core$String$toInt(s);
+var $elm$core$String$toFloat = _String_toFloat;
+var $author$project$Rational$strToFloat = function (s) {
+	var x = $elm$core$String$toFloat(s);
 	if (x.$ === 1) {
-		return 0;
+		return 0.0;
 	} else {
-		var n = x.a;
-		return n;
+		var f = x.a;
+		return f;
 	}
 };
 var $elm$core$String$concat = function (strings) {
@@ -6577,15 +6579,25 @@ var $cmditch$elm_bigint$BigInt$toString = function (bigInt) {
 			return '-' + $cmditch$elm_bigint$BigInt$revMagnitudeToString(mag);
 	}
 };
-var $author$project$Rational$toInt = function (r) {
-	return $author$project$Rational$strToInt(
-		$cmditch$elm_bigint$BigInt$toString(
-			A2($cmditch$elm_bigint$BigInt$div, r.a, r.b)));
-};
+var $author$project$Rational$toFloatN = F2(
+	function (n, r) {
+		var dp = A2($elm$core$Basics$pow, 10, n);
+		return function (x) {
+			return x / dp;
+		}(
+			$author$project$Rational$strToFloat(
+				$cmditch$elm_bigint$BigInt$toString(
+					A2(
+						$cmditch$elm_bigint$BigInt$div,
+						A2(
+							$cmditch$elm_bigint$BigInt$mul,
+							$cmditch$elm_bigint$BigInt$fromInt(dp),
+							r.a),
+						r.b))));
+	});
 var $author$project$Rational$toString = function (r) {
 	return $cmditch$elm_bigint$BigInt$toString(r.a) + (' % ' + $cmditch$elm_bigint$BigInt$toString(r.b));
 };
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString = function (length) {
 	switch (length.$) {
 		case 0:
@@ -6637,9 +6649,11 @@ var $author$project$Show$showText = F3(
 		var r = $author$project$Risk$agg(t);
 		var s1 = $author$project$Rational$toString(r);
 		var s2 = function (i) {
-			return $elm$core$String$fromInt(i) + '%';
+			return $elm$core$String$fromFloat(i) + '%';
 		}(
-			$author$project$Rational$toInt(
+			A2(
+				$author$project$Rational$toFloatN,
+				1,
 				A2(
 					$author$project$Rational$mul,
 					r,
@@ -6693,55 +6707,61 @@ var $author$project$Risk$maxDepth = function (_v0) {
 			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
 	}
 };
+var $elm$core$Basics$round = _Basics_round;
+var $author$project$Show$getLeafXs = F3(
+	function (start, w, t) {
+		if (!t.b) {
+			return _List_fromArray(
+				[
+					_Utils_Tuple2(start, w)
+				]);
+		} else {
+			var _v1 = t.a;
+			var p = _v1.a;
+			var ts = t.b;
+			var end = start + A2(
+				$author$project$Rational$toFloatN,
+				5,
+				A2(
+					$author$project$Rational$mul,
+					A2(
+						$author$project$Rational$fromInt,
+						$elm$core$Basics$round(w),
+						1),
+					p));
+			return A2(
+				$elm$core$List$cons,
+				_Utils_Tuple2(start, end),
+				A3($author$project$Show$getLeafXs, end, w, ts));
+		}
+	});
 var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
 	return {$: 0, a: a};
 };
 var $elm_community$typed_svg$TypedSvg$Types$Paint = function (a) {
 	return {$: 0, a: a};
 };
-var $elm$core$String$toFloat = _String_toFloat;
-var $author$project$Rational$strToFloat = function (s) {
-	var x = $elm$core$String$toFloat(s);
-	if (x.$ === 1) {
-		return 0.0;
-	} else {
-		var f = x.a;
-		return f;
-	}
-};
-var $author$project$Rational$toFloatN = F2(
-	function (n, r) {
-		var dp = A2($elm$core$Basics$pow, 10, n);
-		return function (x) {
-			return x / dp;
-		}(
-			$author$project$Rational$strToFloat(
-				$cmditch$elm_bigint$BigInt$toString(
-					A2(
-						$cmditch$elm_bigint$BigInt$div,
-						A2(
-							$cmditch$elm_bigint$BigInt$mul,
-							$cmditch$elm_bigint$BigInt$fromInt(dp),
-							r.a),
-						r.b))));
-	});
 var $author$project$Show$aggLevel = F2(
-	function (p0, ts) {
-		var f = F2(
-			function (_v0, acc) {
-				var p = _v0.a;
-				return A2($author$project$Rational$add, p, acc);
-			});
-		return A2(
-			$author$project$Rational$toFloatN,
-			5,
-			A3(
-				$elm$core$List$foldr,
-				f,
-				A2($author$project$Rational$fromInt, 0, 1),
-				ts));
+	function (p0, t) {
+		if (!t.b) {
+			return 1.0;
+		} else {
+			var ts = t;
+			var f = F2(
+				function (_v1, acc) {
+					var p = _v1.a;
+					return A2($author$project$Rational$add, p, acc);
+				});
+			return A2(
+				$author$project$Rational$toFloatN,
+				5,
+				A3(
+					$elm$core$List$foldr,
+					f,
+					A2($author$project$Rational$fromInt, 0, 1),
+					ts));
+		}
 	});
-var $elm$core$Basics$round = _Basics_round;
 var $avh4$elm_color$Color$toCssString = function (_v0) {
 	var r = _v0.a;
 	var g = _v0.b;
@@ -6840,7 +6860,7 @@ var $author$project$Show$showLeaf = F6(
 	function (p, ts, xStart, xEnd, yStart, yInc) {
 		var xOffset = (xEnd - xStart) * 0.1;
 		var xLen = (xEnd - xStart) - (xOffset * 2);
-		var pNotLose = _Utils_eq(ts, _List_Nil) ? 1.0 : A2($author$project$Show$aggLevel, p, ts);
+		var pNotLose = A2($author$project$Show$aggLevel, p, ts);
 		var xLenW = xLen * pNotLose;
 		var xLenL = xLen - xLenW;
 		return _List_fromArray(
@@ -6896,22 +6916,18 @@ var $author$project$Show$showBranch = F5(
 		var p = _v0.a;
 		var ts = _v0.b;
 		var yStart2 = yStart + yInc;
+		var xPairs = A3($author$project$Show$getLeafXs, xStart, xEnd - xStart, ts);
 		var len = $elm$core$List$length(ts);
-		var xInc = (xEnd - xStart) / len;
-		var xStart2s = A2(
-			$elm$core$List$map,
-			function (i) {
-				return xStart + (xInc * (i - 1));
-			},
-			A2($elm$core$List$range, 1, len));
 		var f = F2(
-			function (t, xStart2) {
-				return A5($author$project$Show$showBranch, xStart2, xStart2 + xInc, yStart + yInc, yInc, t);
+			function (t, _v1) {
+				var xStart2 = _v1.a;
+				var xEnd2 = _v1.b;
+				return A5($author$project$Show$showBranch, xStart2, xEnd2, yStart + yInc, yInc, t);
 			});
 		return _Utils_ap(
 			A6($author$project$Show$showLeaf, p, ts, xStart, xEnd, yStart, yInc),
 			$elm$core$List$concat(
-				A3($elm$core$List$map2, f, ts, xStart2s)));
+				A3($elm$core$List$map2, f, ts, xPairs)));
 	});
 var $author$project$Show$showTree = F3(
 	function (w, h, t) {
