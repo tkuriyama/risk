@@ -6644,8 +6644,8 @@ var $author$project$Show$showText = F3(
 					$author$project$Rational$mul,
 					r,
 					A2($author$project$Rational$fromInt, 100, 1))));
-		var sWidth = $elm$core$String$length(
-			_Utils_ap(s1, s2)) * 9;
+		var s = s1 + ('  |  (' + (s2 + ')'));
+		var sWidth = $elm$core$String$length(s) * 9;
 		return A2(
 			$elm_community$typed_svg$TypedSvg$text_,
 			_List_fromArray(
@@ -6660,7 +6660,7 @@ var $author$project$Show$showText = F3(
 				]),
 			_List_fromArray(
 				[
-					$elm_community$typed_svg$TypedSvg$Core$text(s1 + ('(' + (s2 + ')')))
+					$elm_community$typed_svg$TypedSvg$Core$text(s)
 				]));
 	});
 var $elm$core$List$maximum = function (list) {
