@@ -23,8 +23,8 @@ showText w h t =
         s1 = R.toString r
         s2 = R.toFloatN 1 (R.mul r (R.fromInt 100 1)) |> \i -> (String.fromFloat i) ++ "%"
         s = s1 ++ "  |  (" ++ s2 ++ ")"
-        sWidth = String.length s * 9 |> toFloat
-    in text_ [ x (px <| w /2  - sWidth / 2)
+        sWidth = String.length s * 7 |> toFloat
+    in text_ [ x (px <| w/2 - sWidth/2)
              , y (px <| textY)
              , class ["infoText"]
              ]
@@ -51,7 +51,7 @@ showLeaf p ts xStart xEnd yStart yInc =
               , y (px yStart)
               , width (px <| xLenW)
               , height (px <| yInc * 0.5)
-              , rx (px 2)
+              , rx (px 4)
               , strokeWidth (px 1.5)
               , fill <| Paint <| Color.lightGreen
               , opacity <| Opacity 0.5
@@ -69,6 +69,12 @@ showLeaf p ts xStart xEnd yStart yInc =
             []
        ]
 
+isLeaf : List PTree -> Bool         
+isLeaf t =
+    case t of
+        [] -> True
+        ((Node _ ts) :: ns) -> ns == [] && ts == []
+        
 getLeafXs : Float -> Float -> List PTree -> List (Float, Float)
 getLeafXs start w t =
     case t of
@@ -80,23 +86,22 @@ getLeafXs start w t =
 showBranch : Float -> Float -> Float -> Float -> PTree -> List (Svg msg)
 showBranch xStart xEnd yStart yInc (Node p ts) =
     let len = List.length ts
-        yStart2 = yStart + yInc
         xPairs = getLeafXs xStart (xEnd - xStart) ts
         f t (xStart2, xEnd2) = showBranch xStart2 xEnd2 (yStart + yInc) yInc t
     in (showLeaf p ts xStart xEnd yStart yInc) ++
-        (List.map2 f ts xPairs |> List.concat)
+       if isLeaf ts then [] else (List.map2 f ts xPairs |> List.concat)
                  
 showTree : Float -> Float -> PTree -> List (Svg msg)
 showTree w h t =
     let depth = maxDepth t
         yStart = 25
-        yInc = min 100 ((h - textY - yStart) / (toFloat depth))
+        yInc = min 50 ((h - textY - yStart) / (toFloat depth))
     in showBranch 0 w (textY + yStart) yInc t        
 
 {- Render Main -}        
                  
 render : Float -> Float -> Model -> List (Svg msg)
-render w h m = let t = pAWin m
+render w h m = let t = Debug.log "\nTree" <| pAWinMemo m
                in [ showText w h t ] ++ showTree w h t
 
                    

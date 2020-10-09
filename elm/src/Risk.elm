@@ -101,7 +101,7 @@ agg (Node p ts) =
               in List.foldr f (R.fromInt 0 1) xs
 
 nodeZero = Node (R.fromInt 0 1) []
-
+           
 aLoses : Battlefield -> Scenario -> Bool
 aLoses (a, d) (_, (aLoss, dLoss)) =
     if d - dLoss <= 0 then False else a - aLoss <= 1
@@ -122,3 +122,44 @@ genTree b p0 =
                         |> Node p0
 
 pAWin b = genTree b (R.fromInt 1 1)
+
+{- Memoized Probabilities -}
+
+showPair : Battlefield -> String
+showPair (a,d) = String.fromInt a ++ "," ++ String.fromInt d           
+
+genTreeMemo : Battlefield -> Probability -> Dict Battlefield PTree -> PTree
+genTreeMemo b p0 dict =
+    case (b, Dict.get b dict) of
+        ((_, 0), _) -> Node p0 []
+        ((1, _), _) -> nodeZero
+        (_, (Just pt)) -> Debug.log ("\nFound in Dict " ++ showPair b) pt
+        (_, _) ->
+            case Dict.get (maxTroops b) pDict of
+                Nothing -> nodeZero
+                Just pairs ->
+                    let update (p, ls) = (p, updateField b ls)
+                        branch (p, bNext) = genTreeMemo bNext p dict
+                    in List.filter (not << aLoses b) pairs
+                       |> List.map update
+                       |> List.map branch
+                       |> Node p0
+          
+seedDict : Dict Battlefield PTree
+seedDict = Dict.fromList [ ((1, 0), Node (R.fromInt 1 0) [])
+                         , ((0, 1), nodeZero)
+                         , ((1, 1), nodeZero) ]
+
+genDict : Battlefield -> Dict Battlefield PTree 
+genDict (a, d) =
+    let atts = List.range 1 a
+        defs = List.range 1 d
+        pairs = crossMap atts defs (\att def -> (att, def))
+        f b dict = let t = genTreeMemo b (R.fromInt 1 1) dict
+                   in Debug.log "\n Dict Updated " <| Dict.insert b t dict
+    in List.foldr f seedDict pairs
+
+pAWinMemo b = let dict = genDict b
+              in case Dict.get b dict of
+                     Just t -> t
+                     Nothing -> Node (R.fromInt 0 1) []
