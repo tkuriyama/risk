@@ -5175,68 +5175,36 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$initModel = _Utils_Tuple2(5, 5);
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$init = function (_v0) {
-	return _Utils_Tuple2($author$project$Main$initModel, $elm$core$Platform$Cmd$none);
-};
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
-var $author$project$Main$update = F2(
-	function (msg, _v0) {
-		var a = _v0.a;
-		var d = _v0.b;
-		switch (msg) {
-			case 0:
-				return _Utils_Tuple2(
-					_Utils_Tuple2(a + 1, d),
-					$elm$core$Platform$Cmd$none);
-			case 1:
-				return (a > 2) ? _Utils_Tuple2(
-					_Utils_Tuple2(a - 1, d),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_Tuple2(a, d),
-					$elm$core$Platform$Cmd$none);
-			case 2:
-				return _Utils_Tuple2(
-					_Utils_Tuple2(a, d + 1),
-					$elm$core$Platform$Cmd$none);
-			default:
-				return (d > 1) ? _Utils_Tuple2(
-					_Utils_Tuple2(a, d - 1),
-					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
-					_Utils_Tuple2(a, d),
-					$elm$core$Platform$Cmd$none);
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
 		}
 	});
-var $author$project$Risk$DecrementA = 1;
-var $author$project$Risk$DecrementD = 3;
-var $author$project$Risk$IncrementA = 0;
-var $author$project$Risk$IncrementD = 2;
-var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Main$fst = function (_v0) {
-	var a = _v0.a;
-	return a;
+var $elm$core$List$concat = function (lists) {
+	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
+var $elm$core$List$concatMap = F2(
+	function (f, list) {
+		return $elm$core$List$concat(
+			A2($elm$core$List$map, f, list));
 	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
+var $author$project$Risk$crossMap = F3(
+	function (xs, ys, f) {
+		return A2(
+			$elm$core$List$concatMap,
+			function (x) {
+				return A2(
+					$elm$core$List$map,
+					function (y) {
+						return A2(f, x, y);
+					},
+					ys);
+			},
+			xs);
+	});
 var $author$project$Rational$Neg = 1;
 var $author$project$Rational$Pos = 0;
 var $cmditch$elm_bigint$BigInt$Pos = function (a) {
@@ -5530,36 +5498,6 @@ var $author$project$Risk$nodeZero = A2(
 	A2($author$project$Rational$fromInt, 0, 1),
 	_List_Nil);
 var $elm$core$Basics$not = _Basics_not;
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $elm$core$List$concat = function (lists) {
-	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
-};
-var $elm$core$List$concatMap = F2(
-	function (f, list) {
-		return $elm$core$List$concat(
-			A2($elm$core$List$map, f, list));
-	});
-var $author$project$Risk$crossMap = F3(
-	function (xs, ys, f) {
-		return A2(
-			$elm$core$List$concatMap,
-			function (x) {
-				return A2(
-					$elm$core$List$map,
-					function (y) {
-						return A2(f, x, y);
-					},
-					ys);
-			},
-			xs);
-	});
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Dict$Black = 1;
@@ -6338,60 +6276,202 @@ var $author$project$Risk$updateField = F2(
 		var dl = _v1.b;
 		return _Utils_Tuple2(a - al, d - dl);
 	});
-var $author$project$Risk$genTree = F2(
-	function (b, p0) {
-		if (!b.b) {
+var $author$project$Risk$updateHead = F2(
+	function (p0, _v0) {
+		var p = _v0.a;
+		var ts = _v0.b;
+		return A2($author$project$Risk$Node, p0, ts);
+	});
+var $author$project$Risk$genTreeMemo = F3(
+	function (b, p0, dict) {
+		var _v0 = _Utils_Tuple2(
+			b,
+			A2($elm$core$Dict$get, b, dict));
+		if (!_v0.a.b) {
+			var _v1 = _v0.a;
 			return A2($author$project$Risk$Node, p0, _List_Nil);
 		} else {
-			if (b.a === 1) {
+			if (_v0.a.a === 1) {
+				var _v2 = _v0.a;
 				return $author$project$Risk$nodeZero;
 			} else {
-				var _v1 = A2(
-					$elm$core$Dict$get,
-					$author$project$Risk$maxTroops(b),
-					$author$project$Risk$pDict);
-				if (_v1.$ === 1) {
-					return $author$project$Risk$nodeZero;
+				if (!_v0.b.$) {
+					var pt = _v0.b.a;
+					return A2($author$project$Risk$updateHead, p0, pt);
 				} else {
-					var pairs = _v1.a;
-					var update = function (_v3) {
-						var p = _v3.a;
-						var ls = _v3.b;
-						return _Utils_Tuple2(
-							p,
-							A2($author$project$Risk$updateField, b, ls));
-					};
-					var branch = function (_v2) {
-						var p = _v2.a;
-						var bNext = _v2.b;
-						return A2($author$project$Risk$genTree, bNext, p);
-					};
-					return A2(
-						$author$project$Risk$Node,
-						p0,
-						A2(
-							$elm$core$List$map,
-							branch,
+					var _v3 = A2(
+						$elm$core$Dict$get,
+						$author$project$Risk$maxTroops(b),
+						$author$project$Risk$pDict);
+					if (_v3.$ === 1) {
+						return $author$project$Risk$nodeZero;
+					} else {
+						var pairs = _v3.a;
+						var update = function (_v5) {
+							var p = _v5.a;
+							var ls = _v5.b;
+							return _Utils_Tuple2(
+								p,
+								A2($author$project$Risk$updateField, b, ls));
+						};
+						var branch = function (_v4) {
+							var p = _v4.a;
+							var bNext = _v4.b;
+							return A3($author$project$Risk$genTreeMemo, bNext, p, dict);
+						};
+						return A2(
+							$author$project$Risk$Node,
+							p0,
 							A2(
 								$elm$core$List$map,
-								update,
+								branch,
 								A2(
-									$elm$core$List$filter,
+									$elm$core$List$map,
+									update,
 									A2(
-										$elm$core$Basics$composeL,
-										$elm$core$Basics$not,
-										$author$project$Risk$aLoses(b)),
-									pairs))));
+										$elm$core$List$filter,
+										A2(
+											$elm$core$Basics$composeL,
+											$elm$core$Basics$not,
+											$author$project$Risk$aLoses(b)),
+										pairs))));
+					}
 				}
 			}
 		}
 	});
-var $author$project$Risk$pAWin = function (b) {
-	return A2(
-		$author$project$Risk$genTree,
-		b,
-		A2($author$project$Rational$fromInt, 1, 1));
+var $author$project$Risk$seedDict = $elm$core$Dict$fromList(
+	_List_fromArray(
+		[
+			_Utils_Tuple2(
+			_Utils_Tuple2(1, 0),
+			A2(
+				$author$project$Risk$Node,
+				A2($author$project$Rational$fromInt, 1, 0),
+				_List_Nil)),
+			_Utils_Tuple2(
+			_Utils_Tuple2(0, 1),
+			$author$project$Risk$nodeZero),
+			_Utils_Tuple2(
+			_Utils_Tuple2(1, 1),
+			$author$project$Risk$nodeZero)
+		]));
+var $author$project$Risk$genDict = function (_v0) {
+	var a = _v0.a;
+	var d = _v0.b;
+	var f = F2(
+		function (b, dict) {
+			var t = A3(
+				$author$project$Risk$genTreeMemo,
+				b,
+				A2($author$project$Rational$fromInt, 1, 1),
+				dict);
+			return A3($elm$core$Dict$insert, b, t, dict);
+		});
+	var defs = A2($elm$core$List$range, 1, d);
+	var atts = A2($elm$core$List$range, 1, a);
+	var pairs = A3(
+		$author$project$Risk$crossMap,
+		atts,
+		defs,
+		F2(
+			function (att, def) {
+				return _Utils_Tuple2(att, def);
+			}));
+	return A3($elm$core$List$foldl, f, $author$project$Risk$seedDict, pairs);
 };
+var $author$project$Main$initModel = _Utils_Tuple2(
+	_Utils_Tuple2(5, 5),
+	$author$project$Risk$genDict(
+		_Utils_Tuple2(10, 10)));
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Main$init = function (_v0) {
+	return _Utils_Tuple2($author$project$Main$initModel, $elm$core$Platform$Cmd$none);
+};
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$update = F2(
+	function (msg, _v0) {
+		var _v1 = _v0.a;
+		var a = _v1.a;
+		var d = _v1.b;
+		var dict = _v0.b;
+		switch (msg) {
+			case 0:
+				return _Utils_Tuple2(
+					_Utils_Tuple2(
+						_Utils_Tuple2(
+							(a < 10) ? (a + 1) : a,
+							d),
+						dict),
+					$elm$core$Platform$Cmd$none);
+			case 1:
+				return _Utils_Tuple2(
+					_Utils_Tuple2(
+						_Utils_Tuple2(
+							(a > 2) ? (a - 1) : a,
+							d),
+						dict),
+					$elm$core$Platform$Cmd$none);
+			case 2:
+				return _Utils_Tuple2(
+					_Utils_Tuple2(
+						_Utils_Tuple2(
+							a,
+							(d < 10) ? (d + 1) : d),
+						dict),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_Tuple2(
+						_Utils_Tuple2(
+							a,
+							(d > 1) ? (d - 1) : d),
+						dict),
+					$elm$core$Platform$Cmd$none);
+		}
+	});
+var $author$project$Risk$DecrementA = 1;
+var $author$project$Risk$DecrementD = 3;
+var $author$project$Risk$IncrementA = 0;
+var $author$project$Risk$IncrementD = 2;
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$div = _VirtualDom_node('div');
+var $author$project$Main$fst = function (_v0) {
+	var a = _v0.a;
+	return a;
+};
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $author$project$Risk$pAWin = F2(
+	function (b, dict) {
+		var _v0 = A2($elm$core$Dict$get, b, dict);
+		if (!_v0.$) {
+			var t = _v0.a;
+			return t;
+		} else {
+			return A2(
+				$author$project$Risk$Node,
+				A2($author$project$Rational$fromInt, 0, 1),
+				_List_Nil);
+		}
+	});
 var $author$project$Rational$pos = function (r) {
 	return !r.d;
 };
@@ -6659,7 +6739,7 @@ var $author$project$Show$showText = F3(
 					r,
 					A2($author$project$Rational$fromInt, 100, 1))));
 		var s = s1 + ('  |  (' + (s2 + ')'));
-		var sWidth = $elm$core$String$length(s) * 9;
+		var sWidth = $elm$core$String$length(s) * 7;
 		return A2(
 			$elm_community$typed_svg$TypedSvg$text_,
 			_List_fromArray(
@@ -6735,6 +6815,16 @@ var $author$project$Show$getLeafXs = F3(
 				A3($author$project$Show$getLeafXs, end, w, ts));
 		}
 	});
+var $author$project$Show$isLeaf = function (t) {
+	if (!t.b) {
+		return true;
+	} else {
+		var _v1 = t.a;
+		var ts = _v1.b;
+		var ns = t.b;
+		return _Utils_eq(ns, _List_Nil) && _Utils_eq(ts, _List_Nil);
+	}
+};
 var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
 	return {$: 0, a: a};
 };
@@ -6878,7 +6968,7 @@ var $author$project$Show$showLeaf = F6(
 						$elm_community$typed_svg$TypedSvg$Attributes$height(
 						$elm_community$typed_svg$TypedSvg$Types$px(yInc * 0.5)),
 						$elm_community$typed_svg$TypedSvg$Attributes$rx(
-						$elm_community$typed_svg$TypedSvg$Types$px(2)),
+						$elm_community$typed_svg$TypedSvg$Types$px(4)),
 						$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
 						$elm_community$typed_svg$TypedSvg$Types$px(1.5)),
 						$elm_community$typed_svg$TypedSvg$Attributes$fill(
@@ -6915,7 +7005,6 @@ var $author$project$Show$showBranch = F5(
 	function (xStart, xEnd, yStart, yInc, _v0) {
 		var p = _v0.a;
 		var ts = _v0.b;
-		var yStart2 = yStart + yInc;
 		var xPairs = A3($author$project$Show$getLeafXs, xStart, xEnd - xStart, ts);
 		var len = $elm$core$List$length(ts);
 		var f = F2(
@@ -6926,19 +7015,21 @@ var $author$project$Show$showBranch = F5(
 			});
 		return _Utils_ap(
 			A6($author$project$Show$showLeaf, p, ts, xStart, xEnd, yStart, yInc),
-			$elm$core$List$concat(
+			$author$project$Show$isLeaf(ts) ? _List_Nil : $elm$core$List$concat(
 				A3($elm$core$List$map2, f, ts, xPairs)));
 	});
 var $author$project$Show$showTree = F3(
 	function (w, h, t) {
 		var yStart = 25;
 		var depth = $author$project$Risk$maxDepth(t);
-		var yInc = A2($elm$core$Basics$min, 100, ((h - $author$project$Show$textY) - yStart) / depth);
+		var yInc = A2($elm$core$Basics$min, 50, ((h - $author$project$Show$textY) - yStart) / depth);
 		return A5($author$project$Show$showBranch, 0, w, $author$project$Show$textY + yStart, yInc, t);
 	});
 var $author$project$Show$render = F3(
-	function (w, h, m) {
-		var t = $author$project$Risk$pAWin(m);
+	function (w, h, _v0) {
+		var b = _v0.a;
+		var dict = _v0.b;
+		var t = A2($author$project$Risk$pAWin, b, dict);
 		return _Utils_ap(
 			_List_fromArray(
 				[
@@ -6966,7 +7057,9 @@ var $elm_community$typed_svg$TypedSvg$Attributes$viewBox = F4(
 					_List_fromArray(
 						[minX, minY, vWidth, vHeight]))));
 	});
-var $author$project$Main$view = function (model) {
+var $author$project$Main$view = function (_v0) {
+	var b = _v0.a;
+	var dict = _v0.b;
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -6984,7 +7077,7 @@ var $author$project$Main$view = function (model) {
 					])),
 				$elm$html$Html$text(
 				'A: ' + $elm$core$String$fromInt(
-					$author$project$Main$fst(model))),
+					$author$project$Main$fst(b))),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
@@ -7007,7 +7100,7 @@ var $author$project$Main$view = function (model) {
 					])),
 				$elm$html$Html$text(
 				'B: ' + $elm$core$String$fromInt(
-					$author$project$Main$snd(model))),
+					$author$project$Main$snd(b))),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
@@ -7024,7 +7117,11 @@ var $author$project$Main$view = function (model) {
 					[
 						A4($elm_community$typed_svg$TypedSvg$Attributes$viewBox, 0, 0, 1000, 800)
 					]),
-				A3($author$project$Show$render, 1000, 800, model))
+				A3(
+					$author$project$Show$render,
+					1000,
+					800,
+					_Utils_Tuple2(b, dict)))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(

@@ -66,6 +66,6 @@ testPAWin : Test
 testPAWin =
     describe "Test pAWin" 
         [ test "Test case for (5,5)" <|
-              \_ -> pAWin (5,5) |> agg |> Rational.toString
+              \_ -> pAWin (5,5) (genDict (5,5)) |> agg |> Rational.toString
                    |> Expect.equal "1311121206180325 % 3656158440062976"
         ]
