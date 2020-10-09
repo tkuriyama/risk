@@ -145,5 +145,3 @@ genDict (a, d) =
 pAWin b dict = case Dict.get b dict of
                    Just t -> t
                    Nothing -> Node (R.fromInt 0 1) []
-                             
-                                

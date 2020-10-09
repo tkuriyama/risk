@@ -7088,6 +7088,7 @@ var $author$project$Main$view = function (_v0) {
 					[
 						$elm$html$Html$text('+')
 					])),
+				$elm$html$Html$text(' '),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(

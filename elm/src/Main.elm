@@ -9,6 +9,7 @@ import Risk exposing (..)
 
 import Browser exposing (element)
 import Html exposing (Html, div, text, button)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import TypedSvg exposing (svg)
 import TypedSvg.Core exposing (Svg)
@@ -32,6 +33,7 @@ view (b, dict) =
         [ button [ onClick DecrementA ] [ text "-" ]
         , text ("A: " ++ String.fromInt (fst b))
         , button [ onClick IncrementA ] [ text "+" ]
+        , text (" " )
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
