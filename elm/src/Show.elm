@@ -15,7 +15,7 @@ import TypedSvg.Core exposing (Svg, text)
 
 {- Show Text -}
 
-textY = 10
+textY = 18
 
 showText : Float -> Float -> PTree -> Svg msg
 showText w h t =
@@ -23,7 +23,7 @@ showText w h t =
         s1 = R.toString r
         s2 = R.toFloatN 1 (R.mul r (R.fromInt 100 1)) |> \i -> (String.fromFloat i) ++ "%"
         s = s1 ++ "  |  (" ++ s2 ++ ")"
-        sWidth = String.length s * 7 |> toFloat
+        sWidth = String.length s * 8 |> toFloat
     in text_ [ x (px <| w/2 - sWidth/2)
              , y (px <| textY)
              , class ["infoText"]
