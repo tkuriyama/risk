@@ -43,8 +43,8 @@ showLeaf : R.Rational -> List PTree -> Float -> Float -> Float -> Float ->
            List (Svg msg)
 showLeaf p ts xStart xEnd yStart yInc =
     let pNotLose = aggLevel p ts
-        xOffset = (xEnd - xStart) * 0.1
-        xLen = xEnd - xStart - (xOffset * 2)
+        xOffset = (xEnd - xStart) / 2 - (min 20 ((xEnd - xStart) * 0.25))
+        xLen = (min 40 ((xEnd - xStart) * 0.75))
         xLenW = xLen * pNotLose
         xLenL = xLen - xLenW
     in [ rect [ x (px <| xStart + xOffset)
@@ -66,7 +66,7 @@ showLeaf p ts xStart xEnd yStart yInc =
               , fill <| Paint <| Color.lightRed
               , opacity <| Opacity 0.5                    
               ]
-            []
+              []
        ]
 
 isLeaf : List PTree -> Bool         
@@ -75,21 +75,37 @@ isLeaf t =
         [] -> True
         ((Node _ ts) :: ns) -> ns == [] && ts == []
         
-getLeafXs : Float -> Float -> List PTree -> List (Float, Float)
-getLeafXs start w t =
-    case t of
-        [] -> [(start, w)]
-        ((Node p _)::ts) -> let end = start + (R.mul (R.fromInt (round w) 1) p
-                                               |> R.toFloatN 5)
-                            in (start, end) :: getLeafXs end w ts
-        
+getLeafXs : Float -> Float -> Int -> List (Float, Float)
+getLeafXs start w n =
+    let inc = w / (toFloat n)
+    in List.range 1 n
+      |> List.map toFloat
+      |> List.map (\i -> (start + (i-1)*inc, start + i * inc))
+
+genLines : Float -> Float -> Float -> Float -> List (Float, Float) -> List (Svg msg)
+genLines xStart xEnd yStart yInc pairs =
+    let xMid1 = (xStart + xEnd) / 2
+        genLine (xStart2, xEnd2) =
+            line [ x1 (px xMid1)
+                 , x2 (px <| (xStart2 + xEnd2) / 2)
+                 , y1 (px <| yStart + yInc * 0.5)
+                 , y2 (px <| yStart + yInc)
+                 , strokeWidth (px 1)
+                 , stroke <| Paint <| Color.darkGrey
+                 ]
+                 [] 
+    in List.map genLine pairs
+          
 showBranch : Float -> Float -> Float -> Float -> PTree -> List (Svg msg)
 showBranch xStart xEnd yStart yInc (Node p ts) =
     let len = List.length ts
-        xPairs = getLeafXs xStart (xEnd - xStart) ts
+        xPairs = getLeafXs xStart (xEnd - xStart) (List.length ts)
         f t (xStart2, xEnd2) = showBranch xStart2 xEnd2 (yStart + yInc) yInc t
     in (showLeaf p ts xStart xEnd yStart yInc) ++
-       if isLeaf ts then [] else (List.map2 f ts xPairs |> List.concat)
+       case isLeaf ts of
+           True -> []
+           _ -> (List.map2 f ts xPairs |> List.concat) ++
+                genLines xStart xEnd yStart yInc xPairs
                  
 showTree : Float -> Float -> PTree -> List (Svg msg)
 showTree w h t =

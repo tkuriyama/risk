@@ -6787,71 +6787,16 @@ var $author$project$Risk$maxDepth = function (_v0) {
 			A2($elm$core$List$map, $author$project$Risk$maxDepth, xs));
 	}
 };
-var $elm$core$Basics$round = _Basics_round;
-var $author$project$Show$getLeafXs = F3(
-	function (start, w, t) {
-		if (!t.b) {
-			return _List_fromArray(
-				[
-					_Utils_Tuple2(start, w)
-				]);
-		} else {
-			var _v1 = t.a;
-			var p = _v1.a;
-			var ts = t.b;
-			var end = start + A2(
-				$author$project$Rational$toFloatN,
-				5,
-				A2(
-					$author$project$Rational$mul,
-					A2(
-						$author$project$Rational$fromInt,
-						$elm$core$Basics$round(w),
-						1),
-					p));
-			return A2(
-				$elm$core$List$cons,
-				_Utils_Tuple2(start, end),
-				A3($author$project$Show$getLeafXs, end, w, ts));
-		}
-	});
-var $author$project$Show$isLeaf = function (t) {
-	if (!t.b) {
-		return true;
-	} else {
-		var _v1 = t.a;
-		var ts = _v1.b;
-		var ns = t.b;
-		return _Utils_eq(ns, _List_Nil) && _Utils_eq(ts, _List_Nil);
-	}
-};
-var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
-	return {$: 0, a: a};
-};
 var $elm_community$typed_svg$TypedSvg$Types$Paint = function (a) {
 	return {$: 0, a: a};
 };
-var $author$project$Show$aggLevel = F2(
-	function (p0, t) {
-		if (!t.b) {
-			return 1.0;
-		} else {
-			var ts = t;
-			var f = F2(
-				function (_v1, acc) {
-					var p = _v1.a;
-					return A2($author$project$Rational$add, p, acc);
-				});
-			return A2(
-				$author$project$Rational$toFloatN,
-				5,
-				A3(
-					$elm$core$List$foldr,
-					f,
-					A2($author$project$Rational$fromInt, 0, 1),
-					ts));
-		}
+var $avh4$elm_color$Color$RgbaSpace = F4(
+	function (a, b, c, d) {
+		return {$: 0, a: a, b: b, c: c, d: d};
 	});
+var $avh4$elm_color$Color$darkGrey = A4($avh4$elm_color$Color$RgbaSpace, 186 / 255, 189 / 255, 182 / 255, 1.0);
+var $elm_community$typed_svg$TypedSvg$line = $elm_community$typed_svg$TypedSvg$Core$node('line');
+var $elm$core$Basics$round = _Basics_round;
 var $avh4$elm_color$Color$toCssString = function (_v0) {
 	var r = _v0.a;
 	var g = _v0.b;
@@ -6899,6 +6844,114 @@ var $elm_community$typed_svg$TypedSvg$TypesToStrings$paintToString = function (p
 			return 'none';
 	}
 };
+var $elm_community$typed_svg$TypedSvg$Attributes$stroke = A2(
+	$elm$core$Basics$composeL,
+	$elm_community$typed_svg$TypedSvg$Core$attribute('stroke'),
+	$elm_community$typed_svg$TypedSvg$TypesToStrings$paintToString);
+var $elm_community$typed_svg$TypedSvg$Attributes$strokeWidth = function (length) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'stroke-width',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$x1 = function (position) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'x1',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(position));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$x2 = function (position) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'x2',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(position));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$y1 = function (position) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'y1',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(position));
+};
+var $elm_community$typed_svg$TypedSvg$Attributes$y2 = function (position) {
+	return A2(
+		$elm_community$typed_svg$TypedSvg$Core$attribute,
+		'y2',
+		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(position));
+};
+var $author$project$Show$genLines = F5(
+	function (xStart, xEnd, yStart, yInc, pairs) {
+		var xMid1 = (xStart + xEnd) / 2;
+		var genLine = function (_v0) {
+			var xStart2 = _v0.a;
+			var xEnd2 = _v0.b;
+			return A2(
+				$elm_community$typed_svg$TypedSvg$line,
+				_List_fromArray(
+					[
+						$elm_community$typed_svg$TypedSvg$Attributes$x1(
+						$elm_community$typed_svg$TypedSvg$Types$px(xMid1)),
+						$elm_community$typed_svg$TypedSvg$Attributes$x2(
+						$elm_community$typed_svg$TypedSvg$Types$px((xStart2 + xEnd2) / 2)),
+						$elm_community$typed_svg$TypedSvg$Attributes$y1(
+						$elm_community$typed_svg$TypedSvg$Types$px(yStart + (yInc * 0.5))),
+						$elm_community$typed_svg$TypedSvg$Attributes$y2(
+						$elm_community$typed_svg$TypedSvg$Types$px(yStart + yInc)),
+						$elm_community$typed_svg$TypedSvg$Attributes$strokeWidth(
+						$elm_community$typed_svg$TypedSvg$Types$px(1)),
+						$elm_community$typed_svg$TypedSvg$Attributes$stroke(
+						$elm_community$typed_svg$TypedSvg$Types$Paint($avh4$elm_color$Color$darkGrey))
+					]),
+				_List_Nil);
+		};
+		return A2($elm$core$List$map, genLine, pairs);
+	});
+var $author$project$Show$getLeafXs = F3(
+	function (start, w, n) {
+		var inc = w / n;
+		return A2(
+			$elm$core$List$map,
+			function (i) {
+				return _Utils_Tuple2(start + ((i - 1) * inc), start + (i * inc));
+			},
+			A2(
+				$elm$core$List$map,
+				$elm$core$Basics$toFloat,
+				A2($elm$core$List$range, 1, n)));
+	});
+var $author$project$Show$isLeaf = function (t) {
+	if (!t.b) {
+		return true;
+	} else {
+		var _v1 = t.a;
+		var ts = _v1.b;
+		var ns = t.b;
+		return _Utils_eq(ns, _List_Nil) && _Utils_eq(ts, _List_Nil);
+	}
+};
+var $elm_community$typed_svg$TypedSvg$Types$Opacity = function (a) {
+	return {$: 0, a: a};
+};
+var $author$project$Show$aggLevel = F2(
+	function (p0, t) {
+		if (!t.b) {
+			return 1.0;
+		} else {
+			var ts = t;
+			var f = F2(
+				function (_v1, acc) {
+					var p = _v1.a;
+					return A2($author$project$Rational$add, p, acc);
+				});
+			return A2(
+				$author$project$Rational$toFloatN,
+				5,
+				A3(
+					$elm$core$List$foldr,
+					f,
+					A2($author$project$Rational$fromInt, 0, 1),
+					ts));
+		}
+	});
 var $elm_community$typed_svg$TypedSvg$Attributes$fill = A2(
 	$elm$core$Basics$composeL,
 	$elm_community$typed_svg$TypedSvg$Core$attribute('fill'),
@@ -6909,10 +6962,6 @@ var $elm_community$typed_svg$TypedSvg$Attributes$height = function (length) {
 		'height',
 		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
 };
-var $avh4$elm_color$Color$RgbaSpace = F4(
-	function (a, b, c, d) {
-		return {$: 0, a: a, b: b, c: c, d: d};
-	});
 var $avh4$elm_color$Color$lightGreen = A4($avh4$elm_color$Color$RgbaSpace, 138 / 255, 226 / 255, 52 / 255, 1.0);
 var $avh4$elm_color$Color$lightRed = A4($avh4$elm_color$Color$RgbaSpace, 239 / 255, 41 / 255, 41 / 255, 1.0);
 var $elm_community$typed_svg$TypedSvg$TypesToStrings$opacityToString = function (opacity) {
@@ -6934,12 +6983,6 @@ var $elm_community$typed_svg$TypedSvg$Attributes$rx = function (length) {
 		'rx',
 		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
 };
-var $elm_community$typed_svg$TypedSvg$Attributes$strokeWidth = function (length) {
-	return A2(
-		$elm_community$typed_svg$TypedSvg$Core$attribute,
-		'stroke-width',
-		$elm_community$typed_svg$TypedSvg$TypesToStrings$lengthToString(length));
-};
 var $elm_community$typed_svg$TypedSvg$Attributes$width = function (length) {
 	return A2(
 		$elm_community$typed_svg$TypedSvg$Core$attribute,
@@ -6948,8 +6991,8 @@ var $elm_community$typed_svg$TypedSvg$Attributes$width = function (length) {
 };
 var $author$project$Show$showLeaf = F6(
 	function (p, ts, xStart, xEnd, yStart, yInc) {
-		var xOffset = (xEnd - xStart) * 0.1;
-		var xLen = (xEnd - xStart) - (xOffset * 2);
+		var xOffset = ((xEnd - xStart) / 2) - A2($elm$core$Basics$min, 20, (xEnd - xStart) * 0.25);
+		var xLen = A2($elm$core$Basics$min, 40, (xEnd - xStart) * 0.75);
 		var pNotLose = A2($author$project$Show$aggLevel, p, ts);
 		var xLenW = xLen * pNotLose;
 		var xLenL = xLen - xLenW;
@@ -7005,18 +7048,31 @@ var $author$project$Show$showBranch = F5(
 	function (xStart, xEnd, yStart, yInc, _v0) {
 		var p = _v0.a;
 		var ts = _v0.b;
-		var xPairs = A3($author$project$Show$getLeafXs, xStart, xEnd - xStart, ts);
+		var xPairs = A3(
+			$author$project$Show$getLeafXs,
+			xStart,
+			xEnd - xStart,
+			$elm$core$List$length(ts));
 		var len = $elm$core$List$length(ts);
 		var f = F2(
-			function (t, _v1) {
-				var xStart2 = _v1.a;
-				var xEnd2 = _v1.b;
+			function (t, _v2) {
+				var xStart2 = _v2.a;
+				var xEnd2 = _v2.b;
 				return A5($author$project$Show$showBranch, xStart2, xEnd2, yStart + yInc, yInc, t);
 			});
 		return _Utils_ap(
 			A6($author$project$Show$showLeaf, p, ts, xStart, xEnd, yStart, yInc),
-			$author$project$Show$isLeaf(ts) ? _List_Nil : $elm$core$List$concat(
-				A3($elm$core$List$map2, f, ts, xPairs)));
+			function () {
+				var _v1 = $author$project$Show$isLeaf(ts);
+				if (_v1) {
+					return _List_Nil;
+				} else {
+					return _Utils_ap(
+						$elm$core$List$concat(
+							A3($elm$core$List$map2, f, ts, xPairs)),
+						A5($author$project$Show$genLines, xStart, xEnd, yStart, yInc, xPairs));
+				}
+			}());
 	});
 var $author$project$Show$showTree = F3(
 	function (w, h, t) {
