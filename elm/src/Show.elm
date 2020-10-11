@@ -118,6 +118,6 @@ showTree w h t =
                  
 render : Float -> Float -> Model -> List (Svg msg)
 render w h (b, dict) = let t = pAWin b dict
-               in [ showText w h t ] ++ showTree w h t
+                       in [ showText w h t ] ++ showTree w h t
 
                    

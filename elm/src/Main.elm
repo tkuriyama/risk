@@ -13,7 +13,8 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import TypedSvg exposing (svg)
 import TypedSvg.Core exposing (Svg)
-import TypedSvg.Attributes exposing (viewBox)
+import TypedSvg.Types exposing (Opacity(..))
+import TypedSvg.Attributes exposing (viewBox, fillOpacity)
 
 fst : (a, b) -> a
 fst (a, _) = a
@@ -37,7 +38,8 @@ view (b, dict) =
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
-        , svg [ viewBox 0 0 1200 800 ] (render 1200 800 (b, dict))
+        , svg [ viewBox 0 0 1200 700
+              , fillOpacity <| Opacity 1 ] (render 1200 700 (b, dict))
         ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
