@@ -5,7 +5,7 @@
     
 ## Link
 
-    
+[Link to visualization](https://tarokuriyama.com/projects/risk.php).
 
 ## Solver
 
@@ -22,4 +22,9 @@ The Elm code compiles an interactive(ish) SVG visualization.
 
 To (re)compile the visualization, run `elm make src/Main.elm --optimize --output=elm.js` from the `elm` directory.
 
-To run tests using `elm-test`, run `elm-test` from the `elm directory.
+To run tests using `elm-test`, run `elm-test` from the `elm` directory. Parts of the project were also reviewed using `elm-coverage`.
+
+## TCR
+
+This project was partly developed using the "Test && Commit || Revert" workflow (see [some notes on TCR here](https://learning.tarokuriyama.com/2020/09/trying-tcr.html), hence the `tcr` directory and associated scripts.
+
