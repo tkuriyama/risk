@@ -37,7 +37,7 @@ view (b, dict) =
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
-        , svg [ viewBox 0 0 1000 800 ] (render 1000 800 (b, dict))
+        , svg [ viewBox 0 0 1200 800 ] (render 1200 800 (b, dict))
         ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
