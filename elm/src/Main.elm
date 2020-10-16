@@ -39,7 +39,7 @@ view (b, dict) =
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
-        , svg [ viewBox 0 0 1200 1400
+        , svg [ viewBox 0 0 1200 1000
               , fillOpacity <| Opacity 1 ]
               ((Show.render 0 0 1200 500 (b, dict)) ++
                (Show2.render 0 500 1200 500 (b, dict)))
