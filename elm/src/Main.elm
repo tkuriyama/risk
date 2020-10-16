@@ -1,7 +1,8 @@
 module Main exposing (main)
 
 -- import Rational exposing (..)
-import Show exposing (..)
+import Show as Show
+import Show2 as Show2
 import Risk exposing (..)
 
 --import Browser.Events exposing (onKeyPress)
@@ -38,8 +39,10 @@ view (b, dict) =
         , button [ onClick DecrementD ] [ text "-" ]
         , text ("B: " ++ String.fromInt (snd b))
         , button [ onClick IncrementD ] [ text "+" ]            
-        , svg [ viewBox 0 0 1200 700
-              , fillOpacity <| Opacity 1 ] (render 1200 700 (b, dict))
+        , svg [ viewBox 0 0 1200 1400
+              , fillOpacity <| Opacity 1 ]
+              ((Show.render 0 0 1200 500 (b, dict)) ++
+               (Show2.render 0 500 1200 500 (b, dict)))
         ]
 
 update : Msg -> Model -> ( Model, Cmd Msg )

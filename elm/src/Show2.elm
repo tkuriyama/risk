@@ -1,7 +1,7 @@
--- Original Tree Representation
--- Game-State Focused     
-    
-module Show exposing (..)
+-- Revised Tree Representation
+-- Probability-Space Oriented    
+
+module Show2 exposing (..)
 
 import Risk exposing (..)
 import Rational as R
