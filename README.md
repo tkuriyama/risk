@@ -1,7 +1,7 @@
 
 # Risk
 
-<img title="Risk Screenshot" width="500" src="https://tarokuriyama.com/projects/risk/images/risk_screenshot.png">
+<img title="Risk Screenshot" width="500" src="https://tarokuriyama.com/projects/risk/images/risk_screenshot.png"> 
     
 ## Link
 
