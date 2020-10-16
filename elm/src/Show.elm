@@ -58,7 +58,8 @@ showLeaf p ts xStart xEnd yStart yInc =
               , width (px <| xLenW)
               , height (px <| yInc * 0.5)
               , rx (px 4)
-              , strokeWidth (px 1.5)
+              , strokeWidth (px 1)
+              , stroke <| Paint <| Color.lightGrey
               , fill <| Paint <| Color.lightGreen
               , opacity <| Opacity 0.5
               ]
@@ -68,7 +69,8 @@ showLeaf p ts xStart xEnd yStart yInc =
               , width (px <| xLenL)
               , height (px <| yInc * 0.5)
               , rx (px 2)
-              , strokeWidth (px 1.5)
+              , strokeWidth (px 1)
+              , stroke <| Paint <| Color.lightGrey                  
               , fill <| Paint <| Color.lightRed
               , opacity <| Opacity 0.5                    
               ]
@@ -96,7 +98,7 @@ genLines xStart xEnd yStart yInc pairs =
                  , x2 (px <| (xStart2 + xEnd2) / 2)
                  , y1 (px <| yStart + yInc * 0.5)
                  , y2 (px <| yStart + yInc)
-                 , strokeWidth (px 1)
+                 , strokeWidth (px 1.5)
                  , stroke <| Paint <| Color.darkGrey
                  ]
                  [] 
