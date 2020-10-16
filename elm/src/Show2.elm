@@ -60,8 +60,8 @@ showRect xStart yStart w h r c o =
          , rx (px r)
          , fill <| Paint <| c
          , opacity <| Opacity o
-         , strokeWidth (px 0.5)--(px 1.1)
-         , stroke <| Paint Color.lightGrey --Color.darkGrey                  
+         , strokeWidth (px 1)--(px 1.1)
+         , stroke <| Paint Color.darkGrey --Color.darkGrey                  
          ] []
 
 -- Left == Undecided or Win; Right == Loss
